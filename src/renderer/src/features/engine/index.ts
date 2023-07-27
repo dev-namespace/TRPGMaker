@@ -5,11 +5,17 @@ import "@pixi/unsafe-eval";
 
 import { makeAutoObservable } from "mobx";
 import { Store, RootStore } from "../store";
+import { Frame } from "./frame";
 
 export class EngineStore implements Store {
     rootStore: RootStore;
     ticker: PIXI.Ticker | undefined;
     app: PIXI.Application | undefined;
+
+    frames: { [key: string]: Frame } = {};
+    // Do not make them observable
+    containers: { [key: string]: PIXI.Container } = {};
+    graphics: { [key: string]: PIXI.Graphics } = {};
 
     constructor(rootStore: RootStore) {
         makeAutoObservable(this);

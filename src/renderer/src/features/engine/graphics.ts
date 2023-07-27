@@ -1,15 +1,24 @@
 import * as PIXI from "pixi.js";
 
-import store from "@renderer/store";
+import rootStore from "@renderer/store";
 
-const { app } = store.Engine;
+const { Engine } = rootStore;
 
-export function drawRectangle() {
-    console.log("!2 drawing rectangle");
-    let square = new PIXI.Graphics();
-    square.beginFill(0xff3300); // Color it red
-    square.drawRect(50, 50, 100, 100); // Draw a square with top-left corner at (50, 50), with width and height of 100
-    square.endFill();
+export interface RectData {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    color: number;
+    rect?: PIXI.Graphics;
+}
 
-    app.stage.addChild(square); // Add the square to the stage so it is visible
+export function drawRect({ x, y, width, height, color, rect }: RectData) {
+    console.log(x);
+    let graphics = rect || new PIXI.Graphics();
+    graphics.clear();
+    graphics.beginFill(color);
+    graphics.drawRect(x, y, width, height);
+    graphics.endFill();
+    return graphics;
 }
