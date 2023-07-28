@@ -1,18 +1,15 @@
 import { EngineStore } from "@renderer/features/engine";
-import { RootStore } from "@renderer/features/store";
-import { when } from "mobx";
+import { AssetStore } from "./features/assets";
+
+export type RootStore = any;
+
+export interface Store {
+    rootStore: RootStore;
+}
 
 const rootStore: RootStore = {};
 
 rootStore.Engine = new EngineStore(rootStore);
-
-const { Engine } = rootStore;
-
-when(
-    () => Engine.app,
-    () => {
-        console.log("!2 app created");
-    },
-);
+rootStore.Assets = new AssetStore(rootStore);
 
 export default rootStore;

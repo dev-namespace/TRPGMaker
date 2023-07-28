@@ -1,9 +1,5 @@
 import * as PIXI from "pixi.js";
 
-import rootStore from "@renderer/store";
-
-const { Engine } = rootStore;
-
 export interface RectData {
     x: number;
     y: number;
@@ -14,7 +10,6 @@ export interface RectData {
 }
 
 export function drawRect({ x, y, width, height, color, rect }: RectData) {
-    console.log(x);
     let graphics = rect || new PIXI.Graphics();
     graphics.clear();
     graphics.beginFill(color);

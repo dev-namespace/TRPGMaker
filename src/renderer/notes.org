@@ -1,0 +1,11 @@
+#+title: Notes
+
+* Reactive Architecture
+** Entities are completely separated from the rendering
+** Engines react to entity changes
+** Engines
+*** GraphicsEngine (wrapper over PIXI.js)
+***  > IsometricEngine
+***    > GridEngine
+***      > BattleEngine
+***        > GameEngine
