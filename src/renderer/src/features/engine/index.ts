@@ -3,7 +3,7 @@
 import * as PIXI from "pixi.js";
 import "@pixi/unsafe-eval";
 
-import { makeAutoObservable } from "mobx";
+import { extendObservable, makeAutoObservable, observable } from "mobx";
 import { Store, RootStore } from "../store";
 // import { Frame, renderFrame } from "./frame";
 import { EngineEntity } from "./entity";
@@ -46,8 +46,16 @@ export class EngineStore implements Store {
 
     add(entity: EngineEntity) {
         this.entities[entity.id] = entity;
+        // extendObservable(
+        //     this,
+        //     {
+        //         entities: observable,
+        //     },
+        //     true,
+        // );
         const disposers = this.renderEntity(entity);
         this.disposers[entity.id] = disposers;
+        return this.entities[entity.id];
     }
 
     remove(entity: EngineEntity) {
@@ -61,12 +69,18 @@ export class EngineStore implements Store {
         return this.renderFunctions[entity.type](entity);
     }
 
+    getDisplayObject(entityId: string) {
+        return this.displayObjects[entityId];
+    }
+
     addDisplayObject(entityId: string, displayObject: PIXI.DisplayObject) {
         this.displayObjects[entityId] = displayObject;
         this.stage?.addChild(displayObject);
     }
 
     removeDisplayObject(entityId: string) {
-        this.stage?.removeChild(this.displayObjects[entityId]);
+        if (this.displayObjects[entityId]) {
+            this.stage?.removeChild(this.displayObjects[entityId]);
+        }
     }
 }

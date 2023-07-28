@@ -1,13 +1,18 @@
 import * as PIXI from "pixi.js";
-import { Assets } from "pixi.js";
 
 import "./assets/index.css";
 import rootStore from "./store";
 import { makeFrame } from "./features/engine/frame";
 import { runInAction, when } from "mobx";
+import {
+    addSprite,
+    makeSprite,
+    setAnimation,
+    updateSprite,
+} from "./features/engine/sprite";
 
-// const { Engine, Assets } = rootStore;
-const { Engine } = rootStore;
+const { Engine, Assets } = rootStore;
+// const { Engine } = rootStore;
 
 Engine.start();
 
@@ -26,24 +31,28 @@ when(
     },
 );
 
-// (async function () {
-//     // @TODO -> move this logic go Assets
-//     const asset = await window.api.getAsset("pointer.png");
-//     const blob = new Blob([asset], { type: "image/png" });
-//     const url = URL.createObjectURL(blob);
-//     const texture = PIXI.Texture.from(url);
-//     PIXI.utils.TextureCache["pointer"] = texture;
+(function () {
+    Assets.add("dragon", "spritesheets/dragon/spritesheet.json");
+    const sprite = addSprite(0, 0, "dragon");
 
-//     const t = PIXI.utils.TextureCache["pointer"];
-//     const sprite = new PIXI.Sprite(t);
-//     Engine.stage.addChild(sprite);
-// })();
+    Engine.entities[sprite.id].animation = "dragon_attack";
 
-(async function () {
-    Assets.add("pointer", "images/pointer.png");
-    const t = await Assets.load("pointer");
-    console.log("!2 texture", t);
+    // runInAction(() => {
+    //     Engine.entities[sprite.id].animation = "dragon_attack";
+    // });
 
-    const sprite = new PIXI.Sprite(t);
-    Engine.stage.addChild(sprite);
+    // Engine.entities[sprite.id].animation = "dragon_attack";
+    // updateSprite(sprite, (sprite) => {
+    //     sprite.animation = "dragon_attack";
+    // });
+    // sprite.animation = "dragon_attack";
+
+    // setTimeout(() => {
+    //     // runInAction(() => {
+    //     sprite.animation = "dragon_attack";
+    //     console.log("!2 changing");
+    //     // });
+    // }, 2000);
+    sprite.playing = true;
+    console.log("!2 sprite", JSON.stringify(sprite));
 })();

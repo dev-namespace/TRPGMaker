@@ -1,5 +1,5 @@
-import { Container } from "pixi.js";
 import rootStore from "@renderer/store";
+import { Container } from "pixi.js";
 import { autorun } from "mobx";
 import { drawRect } from "./graphics";
 import { EngineEntity, makeEntity } from "./entity";
