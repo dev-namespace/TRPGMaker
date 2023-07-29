@@ -34,7 +34,3 @@ export class AssetStore implements Store {
         Engine.stage.addChild(sprite);
     }
 }
-
-function spritesheetMiddleware(resource, next) {
-    console.log("!2 inside middleware");
-}

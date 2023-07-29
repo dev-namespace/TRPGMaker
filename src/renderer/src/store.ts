@@ -9,7 +9,8 @@ export interface Store {
 
 const rootStore: RootStore = {};
 
-rootStore.Engine = new EngineStore(rootStore);
 rootStore.Assets = new AssetStore(rootStore);
+rootStore.Engine = new EngineStore(rootStore);
+rootStore.Engine.loadModules();
 
 export default rootStore;

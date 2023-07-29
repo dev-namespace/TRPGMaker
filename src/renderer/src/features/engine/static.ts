@@ -1,6 +1,6 @@
 import rootStore from "@renderer/store";
 import { EngineEntity, makeEntity } from "./entity";
-import { Sprite } from "pixi.js";
+import { Sprite, Texture } from "pixi.js";
 import { autorun } from "mobx";
 
 const { Engine, Assets } = rootStore;
@@ -33,11 +33,9 @@ export function addStaticSprite(
 }
 
 export async function renderStaticSprite(sprite: StaticSprite) {
-    const texture = await Assets.load(sprite.texture);
-
-    console.log("!2 rendering static");
-    let displayObject = new Sprite(texture);
+    let displayObject = new Sprite(Texture.EMPTY);
     Engine.addDisplayObject(sprite.id, displayObject);
+    displayObject.texture = await Assets.load(sprite.texture);
 
     function update() {
         const { x, y } = Engine.entities[sprite.id];
