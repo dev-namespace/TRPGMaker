@@ -38,7 +38,7 @@ export function renderFrame(frame: Frame) {
             width: entity.width,
             height: entity.height,
         });
-        bg.clear(); // This internal state might be dangerous but let's see
+        bg.clear();
         drawRect({ ...entity, x: 0, y: 0, rect: bg });
     });
 

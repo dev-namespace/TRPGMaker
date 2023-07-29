@@ -3,9 +3,8 @@
 import * as PIXI from "pixi.js";
 import "@pixi/unsafe-eval";
 
-import { extendObservable, makeAutoObservable, observable } from "mobx";
+import { makeAutoObservable } from "mobx";
 import { Store, RootStore } from "../store";
-// import { Frame, renderFrame } from "./frame";
 import { EngineEntity } from "./entity";
 
 export class EngineStore implements Store {
@@ -32,6 +31,8 @@ export class EngineStore implements Store {
         this.app = this.createApp();
         this.stage = this.app.stage;
         this.ticker = this.app.ticker;
+        // displayObject.zIndex = -1000;
+        // Engine.stage.sortableChildren = true;
     }
 
     createApp() {
@@ -46,13 +47,6 @@ export class EngineStore implements Store {
 
     add(entity: EngineEntity) {
         this.entities[entity.id] = entity;
-        // extendObservable(
-        //     this,
-        //     {
-        //         entities: observable,
-        //     },
-        //     true,
-        // );
         const disposers = this.renderEntity(entity);
         this.disposers[entity.id] = disposers;
         return this.entities[entity.id];

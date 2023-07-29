@@ -1,21 +1,11 @@
 import rootStore from "@renderer/store";
 import { EngineEntity, makeEntity } from "./entity";
 import { AnimatedSprite } from "pixi.js";
-import { autorun, reaction, runInAction, when } from "mobx";
+import { autorun, reaction } from "mobx";
 
 const { Engine, Assets } = rootStore;
 
 Engine.renderFunctions["sprite"] = renderSprite;
-
-// @TODO complete interface
-// const sprite = makeSprite(0, 0, "dragon");
-// renderSprite(sprite);
-// const sprite = addSprite(0, 0, "dragon") // make and render shortcut
-// animate(sprite, "idle")
-// Sprite.setAnimation(sprite, "idle")
-// Sprite.play(sprite)
-// Sprite.pause(sprite)
-// await Sprite.playAnimation(sprite, "attack")
 
 export interface Sprite extends EngineEntity {
     type: "sprite";
@@ -27,14 +17,12 @@ export interface Sprite extends EngineEntity {
     speed: number;
 }
 
-// @TODO maybe make this private
-export function makeSprite(x: number, y: number, spritesheet: string): Sprite {
+function makeSprite(x: number, y: number, spritesheet: string): Sprite {
     return makeEntity({
         x,
         y,
         speed: 0.05,
         spritesheet,
-        animation: null,
         playing: false,
         type: "sprite",
     }) as Sprite;
@@ -50,40 +38,34 @@ export async function renderSprite(sprite: Sprite) {
 
     let displayObject = {};
 
+    function update() {
+        const { x, y, speed } = Engine.entities[sprite.id];
+        Object.assign(displayObject, { x, y, animationSpeed: speed });
+    }
+
+    function applyAnimationState() {
+        const { playing, animation } = Engine.entities[sprite.id];
+        if (!animation) return;
+        displayObject[playing ? "play" : "stop"]();
+    }
+
     return [
-        autorun(() => {
-            console.log("!2 position");
-            const { x, y, speed } = Engine.entities[sprite.id];
-            Object.assign(displayObject, { x, y, animationSpeed: speed });
-        }),
+        autorun(update),
         reaction(
             () => Engine.entities[sprite.id].animation,
             () => {
-                const { animation, x, y, speed } = Engine.entities[sprite.id];
-                console.log("!2 animation", animation);
-                Engine.removeDisplayObject(sprite.id); // @TODO: necessary?
+                const { animation } = Engine.entities[sprite.id];
+                if (!animation) return;
+                Engine.removeDisplayObject(sprite.id);
                 displayObject = new AnimatedSprite(
                     spritesheet.animations[animation],
                 );
-                Object.assign(displayObject, { x, y, animationSpeed: speed });
+                console.log("!2 displayObject", displayObject);
+                update();
                 Engine.addDisplayObject(sprite.id, displayObject);
             },
             { fireImmediately: true },
         ),
-        autorun(() => {
-            console.log("!2 playing");
-            const { playing } = Engine.entities[sprite.id];
-            displayObject[playing ? "play" : "stop"]();
-        }),
+        autorun(applyAnimationState),
     ];
-}
-
-export function updateSprite(sprite, func) {
-    runInAction(() => {
-        func(Engine.entities[sprite.id]);
-    });
-}
-
-export function setAnimation(sprite: Sprite, animation: string) {
-    Engine.entities[sprite.id].animation = animation;
 }

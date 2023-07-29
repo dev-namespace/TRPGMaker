@@ -4,15 +4,10 @@ import "./assets/index.css";
 import rootStore from "./store";
 import { makeFrame } from "./features/engine/frame";
 import { runInAction, when } from "mobx";
-import {
-    addSprite,
-    makeSprite,
-    setAnimation,
-    updateSprite,
-} from "./features/engine/sprite";
+import { addSprite } from "./features/engine/sprite";
+import { addStaticSprite } from "./features/engine/static";
 
 const { Engine, Assets } = rootStore;
-// const { Engine } = rootStore;
 
 Engine.start();
 
@@ -32,27 +27,19 @@ when(
 );
 
 (function () {
+    Assets.add("pointer", "images/pointer.png");
     Assets.add("dragon", "spritesheets/dragon/spritesheet.json");
+
     const sprite = addSprite(0, 0, "dragon");
-
-    Engine.entities[sprite.id].animation = "dragon_attack";
-
-    // runInAction(() => {
-    //     Engine.entities[sprite.id].animation = "dragon_attack";
-    // });
-
-    // Engine.entities[sprite.id].animation = "dragon_attack";
-    // updateSprite(sprite, (sprite) => {
-    //     sprite.animation = "dragon_attack";
-    // });
-    // sprite.animation = "dragon_attack";
+    sprite.animation = "dragon_idle";
+    addStaticSprite(0, 0, "pointer");
 
     // setTimeout(() => {
-    //     // runInAction(() => {
+    //     addStaticSprite(0, 0, "pointer");
+    // }, 100);
+
+    // setTimeout(() => {
     //     sprite.animation = "dragon_attack";
-    //     console.log("!2 changing");
-    //     // });
-    // }, 2000);
-    sprite.playing = true;
-    console.log("!2 sprite", JSON.stringify(sprite));
+    // }, 500);
+    // sprite.playing = true;
 })();
