@@ -2,20 +2,24 @@ import * as PIXI from "pixi.js";
 
 import "./assets/index.css";
 import rootStore from "./store";
-import { makeFrame } from "./features/engine/frame";
-import { action, autorun, flow, runInAction, when } from "mobx";
-import { addSprite } from "./features/engine/sprite";
-import { addStaticSprite } from "./features/engine/static";
+import { action, flow, runInAction, when } from "mobx";
+// import { addStaticSprite } from "./features/engine/static";
+import { Frame } from "./features/engine/test";
 
 const { Engine, Assets } = rootStore;
+const { Sprite } = rootStore.Engine;
 
 Engine.start(document.body);
 
-const frame = Engine.Frame.add(0, 0, 100, 100, 0xff0000);
+const frame = new Frame(200, 200, 100, 100, 0xff0000);
+Engine.addEntity(frame);
+
+frame.move(100, 100);
 
 runInAction(() => {
-    Engine.entities[frame.id].color = 0x00ff00;
-    Engine.entities[frame.id].x = 100;
+    frame.color = 0x00ff00;
+    // frame.x = 100;
+    frame.move(300, 300);
 });
 
 when(
@@ -29,11 +33,14 @@ flow(function* () {
     Assets.add("pointer", "images/pointer.png");
     Assets.add("dragon", "spritesheets/dragon/spritesheet.json");
 
-    addStaticSprite(50, 0, "pointer");
-    const sprite = addSprite(0, 0, "dragon");
+    // addStaticSprite(50, 0, "pointer");
+    const sprite = Engine.Sprite.add(0, 0, "dragon");
     sprite.animation = "dragon_walking";
     sprite.loop = true;
     sprite.playing = true;
+
+    // Sprite.move(sprite, x, y);
+    // sprite.move();
 
     setTimeout(
         action(() => {

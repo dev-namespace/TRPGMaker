@@ -3,6 +3,8 @@ import { EngineEntity, makeEntity } from "./entity";
 import { Sprite, Texture } from "pixi.js";
 import { autorun } from "mobx";
 
+// @TODO move to StoreModule
+
 const { Engine, Assets } = rootStore;
 
 Engine.renderFunctions["static-sprite"] = renderStaticSprite;
