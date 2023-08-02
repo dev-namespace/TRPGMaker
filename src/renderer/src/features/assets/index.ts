@@ -20,6 +20,10 @@ export class AssetStore implements Store {
         return Assets.load(key);
     }
 
+    get(key: string) {
+        return Assets.get(key);
+    }
+
     addFS(key: string, path: string) {
         const { Engine } = this.rootStore;
         // await needed? I had it in there before

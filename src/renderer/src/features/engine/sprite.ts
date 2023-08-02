@@ -1,57 +1,63 @@
-import { RootStore, Reactive, StoreModule } from "@renderer/store";
-import { EngineEntity, makeEntity } from "./entity";
+import { RootStore } from "@renderer/store";
+import { RenderableEntity, makeId } from "./entity";
 import { AnimatedSprite, Texture } from "pixi.js";
-import { action, autorun, reaction } from "mobx";
+import { action, autorun, makeObservable, observable, reaction } from "mobx";
+import { Positionable, Scalable } from "./mixins";
 
-export interface Sprite extends EngineEntity {
-    type: "sprite";
-    x: number;
-    y: number;
-    spritesheet: string;
-    animation?: string;
-    animationDone: boolean;
-    loop: boolean;
-    playing: boolean;
-    speed: number;
-}
+export class Sprite implements RenderableEntity {
+    type = "sprite";
+    id: string;
 
-export class SpriteModule implements StoreModule {
-    rootStore: RootStore;
-
-    constructor(rootStore: RootStore) {
-        this.rootStore = rootStore;
-        this.rootStore.Engine.renderFunctions["sprite"] =
-            this.render.bind(this);
+    constructor(
+        public x: number,
+        public y: number,
+        public spritesheet: string,
+        public animation?: string,
+        public animationDone = false,
+        public loop = false,
+        public playing = false,
+        public speed = 0.05,
+        public scale = { x: 1, y: 1 },
+    ) {
+        makeObservable(this, {
+            spritesheet: observable,
+            animation: observable,
+            animationDone: observable,
+            loop: observable,
+            playing: observable,
+            speed: observable,
+        });
+        this.id = makeId();
     }
 
-    private async render(sprite: Reactive<Sprite>) {
-        const { Engine, Assets } = this.rootStore;
+    _render(rootStore: RootStore) {
+        const { Engine, Assets } = rootStore;
 
         const displayObject = new AnimatedSprite([Texture.EMPTY]);
-        Engine.addDisplayObject(sprite.id, displayObject);
+        Engine.addDisplayObject(this.id, displayObject);
         displayObject.onComplete = action(() => {
-            sprite.animationDone = true;
+            this.animationDone = true;
         });
 
-        const spritesheet = await Assets.load(sprite.spritesheet); // @TODO preload
+        const spritesheet = Assets.get(this.spritesheet);
 
-        function update() {
-            const { x, y, speed, loop } = sprite;
+        const update = () => {
+            const { x, y, speed, loop } = this;
             Object.assign(displayObject, { x, y, animationSpeed: speed, loop });
-        }
+        };
 
-        function applyAnimationState() {
-            if (!sprite.animation) return;
-            displayObject[sprite.playing ? "play" : "stop"]();
-        }
+        const applyAnimationState = () => {
+            if (!this.animation) return;
+            displayObject[this.playing ? "play" : "stop"]();
+        };
 
         return [
             autorun(update),
             reaction(
-                () => sprite.animation,
+                () => this.animation,
                 (animation) => {
                     if (animation) {
-                        sprite.animationDone = false;
+                        this.animationDone = false;
                         displayObject.textures =
                             spritesheet.animations[animation];
                     }
@@ -61,22 +67,6 @@ export class SpriteModule implements StoreModule {
             autorun(applyAnimationState),
         ];
     }
-
-    add(x: number, y: number, spritesheet: string): Reactive<Sprite> {
-        const sprite = this.make(x, y, spritesheet);
-        return this.rootStore.Engine.add(sprite);
-    }
-
-    make(x: number, y: number, spritesheet: string): Sprite {
-        return makeEntity({
-            x,
-            y,
-            speed: 0.05,
-            spritesheet,
-            playing: false,
-            animationDone: false,
-            loop: false, // @TODO
-            type: "sprite",
-        }) as Sprite;
-    }
 }
+
+export default Scalable(Positionable(Sprite));

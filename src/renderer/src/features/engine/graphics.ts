@@ -6,10 +6,12 @@ export interface RectData {
     width: number;
     height: number;
     color: number;
-    rect?: PIXI.Graphics;
 }
 
-export function drawRect({ x, y, width, height, color, rect }: RectData) {
+export function drawRect(
+    { x, y, width, height, color }: RectData,
+    rect?: PIXI.Graphics,
+) {
     let graphics = rect || new PIXI.Graphics();
     graphics.clear();
     graphics.beginFill(color);

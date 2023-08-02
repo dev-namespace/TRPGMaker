@@ -21,6 +21,5 @@ const rootStore: RootStore = {} as RootStore;
 
 rootStore.Assets = new AssetStore(rootStore);
 rootStore.Engine = new EngineStore(rootStore);
-rootStore.Engine.loadModules();
 
 export default rootStore;

@@ -4,51 +4,44 @@ import "./assets/index.css";
 import rootStore from "./store";
 import { action, flow, runInAction, when } from "mobx";
 // import { addStaticSprite } from "./features/engine/static";
-import { Frame } from "./features/engine/test";
+import Frame from "./features/engine/frame";
+import { Sprite } from "./features/engine/sprite";
+import { testFramePositioning, testFrames } from "./performance/frames";
 
 const { Engine, Assets } = rootStore;
-const { Sprite } = rootStore.Engine;
 
 Engine.start(document.body);
 
-const frame = new Frame(200, 200, 100, 100, 0xff0000);
-Engine.addEntity(frame);
+// const frame = new Frame(100, 100, 100, 100, 0xff0000);
+// Engine.add(frame);
+// frame.moveTo(200, 200, { speed: 0.2 });
 
-frame.move(100, 100);
+testFramePositioning(1000);
 
-runInAction(() => {
-    frame.color = 0x00ff00;
-    // frame.x = 100;
-    frame.move(300, 300);
-});
+// setTimeout(
+//     action(() => {
+//         frame.x = 200;
+//         frame.y = 200;
+//     }),
+//     1000,
+// );
 
 when(
-    () => Engine.app,
+    () => !!Engine.app,
     () => {
         console.log("!2 app created");
     },
 );
 
+Assets.add("pointer", "images/pointer.png");
+Assets.add("dragon", "spritesheets/dragon/spritesheet.json");
+
 flow(function* () {
-    Assets.add("pointer", "images/pointer.png");
-    Assets.add("dragon", "spritesheets/dragon/spritesheet.json");
+    yield Assets.load("dragon");
+    // const sprite = Engine.add(new Sprite(0, 0, "dragon", "dragon_walking"));
+    // sprite.playing = true;
+    // sprite.loop = true;
 
-    // addStaticSprite(50, 0, "pointer");
-    const sprite = Engine.Sprite.add(0, 0, "dragon");
-    sprite.animation = "dragon_walking";
-    sprite.loop = true;
-    sprite.playing = true;
-
-    // Sprite.move(sprite, x, y);
-    // sprite.move();
-
-    setTimeout(
-        action(() => {
-            sprite.loop = false;
-        }),
-        2000,
-    );
-
-    yield when(() => sprite.animationDone);
-    sprite.animation = "dragon_attack";
+    // yield when(() => sprite.animationDone);
+    // sprite.animation = "dragon_attack";
 })();

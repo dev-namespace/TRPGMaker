@@ -1,74 +1,64 @@
-import { RootStore, Reactive, StoreModule } from "@renderer/store";
-import { Container } from "pixi.js";
-import { autorun } from "mobx";
+import { RootStore } from "@renderer/store";
+import { Container, Graphics } from "pixi.js";
+import { autorun, makeObservable, observable } from "mobx";
 import { drawRect } from "./graphics";
-import { EngineEntity, makeEntity } from "./entity";
+import { RenderableEntity, makeId } from "./entity";
+import { PerformantPositionable } from "./mixins/position";
+import { Scalable } from "./mixins/scale";
+import { pick } from "lodash";
 
-export interface Frame extends EngineEntity {
-    type: "frame";
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-    color: number;
-}
+class Frame implements RenderableEntity {
+    type = "frame";
+    id: string;
 
-export class FrameModule implements StoreModule {
-    rootStore: RootStore;
+    // Accessible mixin properties
+    scale = { x: 1, y: 1 };
 
-    constructor(rootStore: RootStore) {
-        this.rootStore = rootStore;
-        this.rootStore.Engine.renderFunctions["frame"] = this.render.bind(this);
+    constructor(
+        public x: number,
+        public y: number,
+        public width: number,
+        public height: number,
+        public color = 0xf1f1f1,
+    ) {
+        makeObservable(this, {
+            width: observable,
+            height: observable,
+        });
+        this.id = makeId();
     }
 
-    make(
-        x: number,
-        y: number,
-        width: number,
-        height: number,
-        color = 0xf1f1f1,
-    ): Frame {
-        return makeEntity({
-            x,
-            y,
-            width,
-            height,
-            color,
-            type: "frame",
-        }) as Frame;
-    }
-
-    private render(frame: Reactive<Frame>) {
-        const { Engine } = this.rootStore;
+    // @TODO: what if I need to access a mixin property? will probably have to redeclare here
+    _render(rootStore: RootStore) {
+        const { Engine } = rootStore;
 
         const container = new Container();
-        const bg = drawRect(frame);
+        const bg = new Graphics();
         container.addChild(bg);
 
-        Engine.addDisplayObject(frame.id, container);
+        Engine.addDisplayObject(this.id, container);
 
-        const disposer = autorun(() => {
-            Object.assign(container, {
-                x: frame.x,
-                y: frame.y,
-                width: frame.width,
-                height: frame.height,
-            });
-            bg.clear();
-            drawRect({ ...frame, x: 0, y: 0, rect: bg });
-        });
+        const disposers = [
+            autorun(() => {
+                container.position.set(this.x, this.y);
+            }),
+            autorun(() => {
+                Object.assign(container, pick(this, ["width", "height"]));
+                bg.clear();
+                drawRect(
+                    { x: 0, y: 0, ...pick(this, ["width", "height", "color"]) },
+                    bg,
+                );
+            }),
+        ];
 
-        return [disposer];
+        return { disposers, baseDisplayObject: container };
     }
 
-    add(
-        x: number,
-        y: number,
-        width: number,
-        height: number,
-        color = 0xf1f1f1,
-    ): Reactive<Frame> {
-        const frame = this.make(x, y, width, height, color);
-        return this.rootStore.Engine.add(frame);
-    }
+    _update(_rootStore: RootStore, _delta: number) {}
+
+    // TODO: serialize -> lodash pick without _render
+    // TODO: unserialize
 }
+
+export default Scalable(PerformantPositionable(Frame));
