@@ -7,6 +7,12 @@ import { makeAutoObservable } from "mobx";
 import { EngineEntity, RenderableEntity } from "./entity";
 import { Store, RootStore, Reactive, Disposer } from "@renderer/store";
 
+// Intellisense help
+export { default as Frame } from "./frame";
+export { default as Container } from "./container";
+export { default as AnimatedSprite } from "./animatedSprite";
+export { default as Sprite } from "./sprite";
+
 export type RenderFunction = (entity: Reactive<any>) => {
     disposers: Disposer[];
     baseDisplayObject: PIXI.DisplayObject;

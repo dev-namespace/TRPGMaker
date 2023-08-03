@@ -1,11 +1,10 @@
 import { RootStore } from "@renderer/store";
 import { RenderableEntity, makeId } from "./entity";
 import { Container } from "pixi.js";
-import { makeObservable, observable } from "mobx";
+import { makeObservable } from "mobx";
 import { PerformantPositionable } from "./mixins/position";
 import { Scalable } from "./mixins/scale";
 import { Renderable } from "./mixins/render";
-import { flowRight } from "lodash";
 
 // @TODO: I don't like having to create an interface for this... why is not working with _Container?
 export type IContainer = { id: string; children: RenderableEntity[] };
@@ -56,8 +55,4 @@ class _Container implements RenderableEntity {
     _update(_rootStore: RootStore, _delta: number) {}
 }
 
-export default flowRight(
-    Scalable,
-    PerformantPositionable,
-    Renderable,
-)(_Container);
+export default Scalable(PerformantPositionable(Renderable(_Container)));

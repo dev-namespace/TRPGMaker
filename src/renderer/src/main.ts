@@ -3,15 +3,12 @@ import * as PIXI from "pixi.js";
 import "./assets/index.css";
 import rootStore from "./store";
 import { action, flow, runInAction, when } from "mobx";
-import Frame from "./features/engine/frame";
-import AnimatedSprite from "./features/engine/animSprite";
-import Container from "./features/engine/container";
-import Sprite from "./features/engine/sprite";
 import { testFramePositioning, testFrames } from "./performance/frames";
 import {
     testSpriteMovement,
     testSpritePositioning,
 } from "./performance/sprites";
+import { AnimatedSprite, Frame, Sprite } from "./features/engine";
 
 const { Engine, Assets } = rootStore;
 
@@ -38,9 +35,7 @@ flow(function* () {
     // const pointer = Engine.add(new Sprite(0, 0, "pointer"));
     // container.add(pointer);
     // container.setScale(2, 2);
-
     // container.setPosition(100, 100);
-
     // pointer.moveTo(100, 100, { duration: 500 });
 
     // yield Assets.load("pointer");
@@ -50,6 +45,8 @@ flow(function* () {
     // setTimeout(() => {
     //     pointer.moveTo(50, 50, { duration: 300 });
     // }, 500);
+    // const frame = Engine.add(new Frame(0, 0, 100, 100));
+    // frame.setPosition(100, 100);
 
     yield Assets.load("dragon");
     const sprite = Engine.add(

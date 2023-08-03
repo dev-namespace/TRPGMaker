@@ -6,10 +6,9 @@ import { PerformantPositionable } from "./mixins/position";
 import { Scalable } from "./mixins/scale";
 import { IContainer } from "./container";
 import { Renderable } from "./mixins/render";
-import { flowRight } from "lodash";
 
 class _Sprite implements RenderableEntity {
-    type = "sprite"; // @TODO: needed?
+    type = "sprite"; // @TODO: needed? maybe tags with multiple tags like sprite
     parent?: IContainer;
     id: string;
 
@@ -41,4 +40,4 @@ class _Sprite implements RenderableEntity {
     _update(_rootStore: RootStore, _elapsed: number) {}
 }
 
-export default flowRight(Scalable, PerformantPositionable, Renderable)(_Sprite);
+export default Scalable(PerformantPositionable(Renderable(_Sprite)));

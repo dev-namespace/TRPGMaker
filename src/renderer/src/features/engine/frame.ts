@@ -7,10 +7,11 @@ import { PerformantPositionable } from "./mixins/position";
 import { Scalable } from "./mixins/scale";
 import { pick } from "lodash";
 import { Renderable } from "./mixins/render";
-import { flowRight } from "lodash";
+import { IContainer } from "./container";
 
 class Frame implements RenderableEntity {
     type = "frame";
+    parent?: IContainer;
     id: string;
 
     scale = { x: 1, y: 1 };
@@ -62,4 +63,4 @@ class Frame implements RenderableEntity {
     // TODO: unserialize
 }
 
-export default flowRight(Scalable, PerformantPositionable, Renderable)(Frame);
+export default Scalable(PerformantPositionable(Renderable(Frame)));

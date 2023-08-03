@@ -2,7 +2,6 @@ import { RootStore } from "@renderer/store";
 import { action, makeObservable, observable, runInAction } from "mobx";
 import { GConstructor } from "./types";
 import curves from "@renderer/utils/curves";
-import { vec2 } from "gl-matrix";
 import { IRenderable } from "./render";
 import { Assets } from "pixi.js";
 
@@ -28,7 +27,7 @@ export interface Animation {
 
 export type IAnimable = GConstructor<{
     spritesheet: string;
-    animation: string;
+    animation?: string;
     loop: boolean;
     playing: boolean;
     speed: number;

@@ -24,17 +24,17 @@ export class AssetStore implements Store {
         return Assets.get(key);
     }
 
-    addFS(key: string, path: string) {
-        const { Engine } = this.rootStore;
-        // await needed? I had it in there before
-        const asset = window.api.getAsset(path);
-        const blob = new Blob([asset], { type: "image/png" });
-        const url = URL.createObjectURL(blob);
-        const texture = Texture.from(url);
-        utils.TextureCache[key] = texture;
+    // addFS(key: string, path: string) {
+    //     const { Engine } = this.rootStore;
+    //     // await needed? I had it in there before
+    //     const asset = window.api.getAsset(path);
+    //     const blob = new Blob([asset], { type: "image/png" });
+    //     const url = URL.createObjectURL(blob);
+    //     const texture = Texture.from(url);
+    //     utils.TextureCache[key] = texture;
 
-        const t = utils.TextureCache[key];
-        const sprite = new Sprite(t);
-        Engine.stage.addChild(sprite);
-    }
+    //     const t = utils.TextureCache[key];
+    //     const sprite = new Sprite(t);
+    //     Engine.stage.addChild(sprite);
+    // }
 }
