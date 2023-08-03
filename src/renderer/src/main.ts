@@ -56,9 +56,13 @@ flow(function* () {
         new AnimatedSprite(0, 0, "dragon", "dragon_idle"),
     );
     sprite.setScale(3, 3);
-    sprite.setAnimation("dragon_attack");
-    setTimeout(() => {
-        sprite.animate("dragon_attack", { duration: 400, curve: "ease-in" });
+    sprite.setAnimation("dragon_idle");
+    setTimeout(async () => {
+        await sprite.animate("dragon_attack", {
+            duration: 400,
+            curve: "ease-in",
+        });
+        // sprite.setAnimation("dragon_idle");
         // sprite.loop = true;
     }, 1000);
 

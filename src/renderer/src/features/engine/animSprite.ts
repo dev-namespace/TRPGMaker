@@ -14,7 +14,6 @@ class _AnimatedSprite implements RenderableEntity {
     parent?: IContainer;
     id: string;
     frame: number = 0;
-    animationDone = false;
     loop = false;
     playing = false;
 
@@ -37,15 +36,12 @@ class _AnimatedSprite implements RenderableEntity {
         Engine.addDisplayObject(this.id, displayObject);
 
         const spritesheet = Assets.get(this.spritesheet);
-        console.log("!2 animation", this.animation);
-        console.log("!2 ", spritesheet.animations[this.animation!]);
 
         const disposers = [
             autorun(() => {
                 if (this.animation) {
                     displayObject.texture =
                         spritesheet.animations[this.animation][this.frame];
-                    // console.log("!2 frame:", this.frame);
                 } else {
                     displayObject.texture = Texture.EMPTY;
                 }

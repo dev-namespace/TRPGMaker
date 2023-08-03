@@ -29,7 +29,6 @@ export interface Animation {
 export type IAnimable = GConstructor<{
     spritesheet: string;
     animation: string;
-    animationDone: boolean;
     loop: boolean;
     playing: boolean;
     speed: number;
@@ -45,7 +44,6 @@ export function Animable<TBase extends IAnimable & IRenderable>(Base: TBase) {
             makeObservable(this, {
                 spritesheet: observable,
                 animation: observable,
-                animationDone: observable,
                 loop: observable,
                 playing: observable,
                 speed: observable,
@@ -67,12 +65,13 @@ export function Animable<TBase extends IAnimable & IRenderable>(Base: TBase) {
                 animation.elapsed += elapsed; // @TODO round?
 
                 const mu = curves[animation.curve];
-                const frameNumber = Math.floor(
-                    mu(animation.elapsed, animation.duration) *
-                        (animation.target - animation.source),
+                const frameNumber = Math.min(
+                    Math.floor(
+                        mu(animation.elapsed, animation.duration) *
+                            (animation.target - animation.source),
+                    ),
+                    animation.target - 1,
                 );
-
-                this.frame = animation.source + frameNumber;
 
                 if (animation.elapsed >= animation.duration) {
                     if (this.loop) {
@@ -82,6 +81,8 @@ export function Animable<TBase extends IAnimable & IRenderable>(Base: TBase) {
                         this._animations.shift();
                     }
                 }
+
+                this.frame = animation.source + Math.max(frameNumber);
             });
         }
 
@@ -105,6 +106,7 @@ export function Animable<TBase extends IAnimable & IRenderable>(Base: TBase) {
                     .length as number;
                 source = source || 0;
                 target = target || length - 1;
+                target = target + 1;
 
                 if (speed) {
                     duration = Math.abs(source - length) / speed;
