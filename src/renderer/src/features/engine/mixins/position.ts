@@ -1,8 +1,9 @@
 import { RootStore } from "@renderer/store";
 import { action, makeObservable, observable, runInAction } from "mobx";
-import { GConstructor, IRenderable } from "./types";
+import { GConstructor } from "./types";
 import curves from "@renderer/utils/curves";
 import { vec2 } from "gl-matrix";
+import { IRenderable } from "./render";
 
 export type Speed = number;
 export type Duration = number;
@@ -10,6 +11,7 @@ export type Duration = number;
 export type MovementOptions = {
     duration?: number;
     speed?: Speed;
+    curve?: keyof typeof curves;
 };
 
 export interface Movement {
@@ -17,7 +19,7 @@ export interface Movement {
     target: vec2;
     elapsed: number;
     duration: number;
-    curve: "linear" | "ease-in" | "ease-out";
+    curve: keyof typeof curves;
     callback?: Function;
 }
 
@@ -128,7 +130,7 @@ export function PerformantPositionable<
                         vec2.create(),
                         movement.source,
                         movement.target,
-                        curves.linear(
+                        curves[movement.curve](
                             Math.min(movement.elapsed, movement.duration),
                             movement.duration,
                         ),
@@ -149,7 +151,11 @@ export function PerformantPositionable<
             this._newPosition = { x, y };
         }
 
-        moveTo(x: number, y: number, { duration, speed }: MovementOptions) {
+        moveTo(
+            x: number,
+            y: number,
+            { duration, speed, curve = "linear" }: MovementOptions,
+        ) {
             return new Promise((resolve) => {
                 if (speed) {
                     duration =
@@ -164,7 +170,7 @@ export function PerformantPositionable<
                     target: vec2.fromValues(x, y),
                     elapsed: 0,
                     duration: duration,
-                    curve: "linear",
+                    curve: curve,
                     callback: resolve,
                 });
             });

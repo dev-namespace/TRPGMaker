@@ -12,21 +12,22 @@ export type RenderFunction = (entity: Reactive<any>) => {
     baseDisplayObject: PIXI.DisplayObject;
 };
 
+export type UpdateFunction = (rootStore: RootStore, elapsedMS: number) => void;
+
 export class EngineStore implements Store {
     rootStore: RootStore;
     ticker: PIXI.Ticker | undefined;
     stage: PIXI.Container | undefined;
     app: PIXI.Application | undefined;
 
-    // @TODO: maybe entities don't need to be made observable anymore (they are stores)
     entities: { [key: string]: RenderableEntity } = {};
-
     disposers: { [key: string]: Disposer[] } = {};
     renderFunctions: { [key: string]: RenderFunction } = {};
     displayObjects: { [key: string]: PIXI.DisplayObject } = {};
 
     constructor(rootStore: RootStore) {
         makeAutoObservable(this, {
+            entities: false,
             disposers: false,
             renderFunctions: false,
             displayObjects: false,
@@ -41,7 +42,7 @@ export class EngineStore implements Store {
         this.ticker = this.app.ticker;
         // console.log(this.ticker.minFPS, this.ticker.maxFPS);
 
-        this.ticker.add((delta) => {
+        this.ticker.add(() => {
             for (let entity of Object.values(this.entities)) {
                 // console.log(this.ticker!.elapsedMS);
                 entity._update(this.rootStore, this.ticker!.elapsedMS);
@@ -95,17 +96,22 @@ export class EngineStore implements Store {
         }
     }
 
-    // private renderEntity(entity: EngineEntity): Disposer[] {
-    //     return this.renderFunctions[entity.type](entity);
-    // }
-
     getDisplayObject(entityId: string) {
         return this.displayObjects[entityId];
     }
 
+    appendToParent(entity: RenderableEntity) {
+        const entityDisplayObject = this.displayObjects[entity.id];
+        const container = entity.parent
+            ? (this.displayObjects[entity.parent.id] as PIXI.Container)
+            : this.stage!;
+
+        this.removeDisplayObject(entity.id);
+        container.addChild(entityDisplayObject);
+    }
+
     addDisplayObject(entityId: string, displayObject: PIXI.DisplayObject) {
         this.displayObjects[entityId] = displayObject;
-        this.stage?.addChild(displayObject);
     }
 
     removeDisplayObject(entityId: string) {
@@ -114,3 +120,5 @@ export class EngineStore implements Store {
         }
     }
 }
+
+export type DisplayObject = PIXI.DisplayObject;

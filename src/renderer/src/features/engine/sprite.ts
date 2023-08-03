@@ -1,31 +1,26 @@
 import { RootStore } from "@renderer/store";
 import { RenderableEntity, makeId } from "./entity";
-import { AnimatedSprite, Texture } from "pixi.js";
-import { action, autorun, makeObservable, observable, reaction } from "mobx";
-import { Positionable, Scalable } from "./mixins";
+import { Sprite, Texture } from "pixi.js";
+import { makeObservable, observable } from "mobx";
+import { PerformantPositionable } from "./mixins/position";
+import { Scalable } from "./mixins/scale";
+import { IContainer } from "./container";
+import { Renderable } from "./mixins/render";
+import { flowRight } from "lodash";
 
-export class Sprite implements RenderableEntity {
-    type = "sprite";
+class _Sprite implements RenderableEntity {
+    type = "sprite"; // @TODO: needed?
+    parent?: IContainer;
     id: string;
 
     constructor(
         public x: number,
         public y: number,
-        public spritesheet: string,
-        public animation?: string,
-        public animationDone = false,
-        public loop = false,
-        public playing = false,
-        public speed = 0.05,
+        public texture: string,
         public scale = { x: 1, y: 1 },
     ) {
         makeObservable(this, {
-            spritesheet: observable,
-            animation: observable,
-            animationDone: observable,
-            loop: observable,
-            playing: observable,
-            speed: observable,
+            texture: observable,
         });
         this.id = makeId();
     }
@@ -33,40 +28,17 @@ export class Sprite implements RenderableEntity {
     _render(rootStore: RootStore) {
         const { Engine, Assets } = rootStore;
 
-        const displayObject = new AnimatedSprite([Texture.EMPTY]);
+        const displayObject = new Sprite(Texture.EMPTY);
         Engine.addDisplayObject(this.id, displayObject);
-        displayObject.onComplete = action(() => {
-            this.animationDone = true;
-        });
 
-        const spritesheet = Assets.get(this.spritesheet);
+        displayObject.texture = Assets.get(this.texture);
 
-        const update = () => {
-            const { x, y, speed, loop } = this;
-            Object.assign(displayObject, { x, y, animationSpeed: speed, loop });
-        };
+        const disposers = [];
 
-        const applyAnimationState = () => {
-            if (!this.animation) return;
-            displayObject[this.playing ? "play" : "stop"]();
-        };
-
-        return [
-            autorun(update),
-            reaction(
-                () => this.animation,
-                (animation) => {
-                    if (animation) {
-                        this.animationDone = false;
-                        displayObject.textures =
-                            spritesheet.animations[animation];
-                    }
-                },
-                { fireImmediately: true },
-            ),
-            autorun(applyAnimationState),
-        ];
+        return { disposers, baseDisplayObject: displayObject };
     }
+
+    _update(_rootStore: RootStore, _elapsed: number) {}
 }
 
-export default Scalable(Positionable(Sprite));
+export default flowRight(Scalable, PerformantPositionable, Renderable)(_Sprite);

@@ -1,4 +1,4 @@
-import { ObservableValue } from "mobx/dist/internal";
+import { IReactionDisposer, ObservableValue } from "mobx/dist/internal";
 import { EngineStore } from "@renderer/features/engine";
 import { AssetStore } from "./features/assets";
 
@@ -7,7 +7,8 @@ export type RootStore = {
     Assets: AssetStore;
 };
 export type Reactive<T> = T & ObservableValue<T>;
-export type Disposer = () => void;
+
+export type Disposer = IReactionDisposer;
 
 export interface Store {
     rootStore: RootStore;

@@ -3,28 +3,24 @@ import * as PIXI from "pixi.js";
 import "./assets/index.css";
 import rootStore from "./store";
 import { action, flow, runInAction, when } from "mobx";
-// import { addStaticSprite } from "./features/engine/static";
 import Frame from "./features/engine/frame";
-import { Sprite } from "./features/engine/sprite";
+import AnimatedSprite from "./features/engine/animSprite";
+import Container from "./features/engine/container";
+import Sprite from "./features/engine/sprite";
 import { testFramePositioning, testFrames } from "./performance/frames";
+import {
+    testSpriteMovement,
+    testSpritePositioning,
+} from "./performance/sprites";
 
 const { Engine, Assets } = rootStore;
 
+PIXI.BaseTexture.defaultOptions.scaleMode = PIXI.SCALE_MODES.NEAREST;
+
 Engine.start(document.body);
 
-// const frame = new Frame(100, 100, 100, 100, 0xff0000);
-// Engine.add(frame);
-// frame.moveTo(200, 200, { speed: 0.2 });
-
-testFramePositioning(1000);
-
-// setTimeout(
-//     action(() => {
-//         frame.x = 200;
-//         frame.y = 200;
-//     }),
-//     1000,
-// );
+// testFramePositioning(1000);
+// testSpriteMovement(10);
 
 when(
     () => !!Engine.app,
@@ -37,10 +33,34 @@ Assets.add("pointer", "images/pointer.png");
 Assets.add("dragon", "spritesheets/dragon/spritesheet.json");
 
 flow(function* () {
+    // yield Assets.load("pointer");
+    // const container = Engine.add(new Container(0, 0));
+    // const pointer = Engine.add(new Sprite(0, 0, "pointer"));
+    // container.add(pointer);
+    // container.setScale(2, 2);
+
+    // container.setPosition(100, 100);
+
+    // pointer.moveTo(100, 100, { duration: 500 });
+
+    // yield Assets.load("pointer");
+    // const pointer = Engine.add(new Sprite(0, 0, "pointer"));
+    // pointer.setScale(2, 2);
+
+    // setTimeout(() => {
+    //     pointer.moveTo(50, 50, { duration: 300 });
+    // }, 500);
+
     yield Assets.load("dragon");
-    // const sprite = Engine.add(new Sprite(0, 0, "dragon", "dragon_walking"));
-    // sprite.playing = true;
-    // sprite.loop = true;
+    const sprite = Engine.add(
+        new AnimatedSprite(0, 0, "dragon", "dragon_idle"),
+    );
+    sprite.setScale(3, 3);
+    sprite.setAnimation("dragon_attack");
+    setTimeout(() => {
+        sprite.animate("dragon_attack", { duration: 400, curve: "ease-in" });
+        // sprite.loop = true;
+    }, 1000);
 
     // yield when(() => sprite.animationDone);
     // sprite.animation = "dragon_attack";

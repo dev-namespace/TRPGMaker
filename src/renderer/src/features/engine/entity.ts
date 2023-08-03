@@ -1,11 +1,14 @@
 import { Disposer, RootStore } from "@renderer/store";
 import { v4 as uuid } from "uuid";
-import { RenderFunction } from ".";
+import { RenderFunction, UpdateFunction } from ".";
+import { IContainer } from "./container";
 
 export interface RenderableEntity {
     id: string;
     type: string; // @TODO: needed?
+    parent?: IContainer;
     _render: RenderFunction;
+    _update: UpdateFunction;
 }
 
 export interface EngineEntity {

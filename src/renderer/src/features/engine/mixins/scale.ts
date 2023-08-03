@@ -1,7 +1,8 @@
 import { RootStore } from "@renderer/store";
 import { action, autorun, makeObservable, observable } from "mobx";
-import { GConstructor, IRenderable } from "./types";
+import { GConstructor } from "./types";
 import { addReactions } from "./utils";
+import { IRenderable } from "./render";
 
 export type IScalable = GConstructor<{ scale: { x: number; y: number } }>;
 

@@ -6,12 +6,13 @@ import { RenderableEntity, makeId } from "./entity";
 import { PerformantPositionable } from "./mixins/position";
 import { Scalable } from "./mixins/scale";
 import { pick } from "lodash";
+import { Renderable } from "./mixins/render";
+import { flowRight } from "lodash";
 
 class Frame implements RenderableEntity {
     type = "frame";
     id: string;
 
-    // Accessible mixin properties
     scale = { x: 1, y: 1 };
 
     constructor(
@@ -61,4 +62,4 @@ class Frame implements RenderableEntity {
     // TODO: unserialize
 }
 
-export default Scalable(PerformantPositionable(Frame));
+export default flowRight(Scalable, PerformantPositionable, Renderable)(Frame);
