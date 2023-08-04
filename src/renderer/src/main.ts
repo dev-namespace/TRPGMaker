@@ -9,6 +9,7 @@ import {
     testSpritePositioning,
 } from "./performance/sprites";
 import { AnimatedSprite, Frame, Sprite } from "./features/engine";
+import { wait } from "./utils/time";
 
 const { Engine, Assets } = rootStore;
 
@@ -17,7 +18,7 @@ PIXI.BaseTexture.defaultOptions.scaleMode = PIXI.SCALE_MODES.NEAREST;
 Engine.start(document.body);
 
 // testFramePositioning(1000);
-// testSpriteMovement(10);
+// testSpriteMovement(1000);
 
 when(
     () => !!Engine.app,
@@ -54,14 +55,13 @@ flow(function* () {
     );
     sprite.setScale(3, 3);
     sprite.setAnimation("dragon_idle");
-    setTimeout(async () => {
-        await sprite.animate("dragon_attack", {
-            duration: 400,
-            curve: "ease-in",
-        });
-        // sprite.setAnimation("dragon_idle");
-        // sprite.loop = true;
-    }, 1000);
+    yield wait(400);
+    yield sprite.animate("dragon_attack", {
+        duration: 400,
+        curve: "ease-in",
+    });
+    yield wait(400);
+    sprite.setAnimation("dragon_idle");
 
     // yield when(() => sprite.animationDone);
     // sprite.animation = "dragon_attack";

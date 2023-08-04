@@ -29,7 +29,7 @@ export async function testSpriteMovement(n: number) {
     async function randomMovement(sprite) {
         const x = Math.random() * 1000;
         const y = Math.random() * 1000;
-        await sprite.moveTo(x, y, { speed: 0.2, curve: "ease-in-out" });
+        await sprite.moveTo(x, y, { speed: 0.2, curve: "ease-in" });
         randomMovement(sprite);
     }
 
