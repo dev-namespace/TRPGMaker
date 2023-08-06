@@ -2,6 +2,7 @@ import { Disposer, RootStore } from "@renderer/store";
 import { v4 as uuid } from "uuid";
 import { RenderFunction, UpdateFunction } from ".";
 import { IContainer } from "./container";
+import { DisplayObject } from "pixi.js";
 
 export interface RenderableEntity {
     id: string;

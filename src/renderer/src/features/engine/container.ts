@@ -7,14 +7,19 @@ import { Scalable } from "./mixins/scale";
 import { Renderable } from "./mixins/render";
 
 // @TODO: I don't like having to create an interface for this... why is not working with _Container?
-export type IContainer = { id: string; children: RenderableEntity[] };
+export type IContainer = RenderableEntity & {
+    children: RenderableEntity[];
+};
 
-class _Container implements RenderableEntity {
+class _Container implements RenderableEntity, IContainer {
     type = "container"; // @TODO: needed?
     parent?: IContainer;
-    id: string;
     children: RenderableEntity[] = [];
+    id: string;
+
+    // definately initialized by _render
     rootStore!: RootStore;
+    baseDisplayObject!: Container;
 
     constructor(
         public x: number,
@@ -52,7 +57,7 @@ class _Container implements RenderableEntity {
         return { disposers, baseDisplayObject: displayObject };
     }
 
-    _update(_rootStore: RootStore, _delta: number) {}
+    _update(_rootStore: RootStore, _elapsedMS: number) {}
 }
 
 export default Scalable(PerformantPositionable(Renderable(_Container)));

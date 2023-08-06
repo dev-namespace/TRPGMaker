@@ -8,13 +8,18 @@ import { Scalable } from "./mixins/scale";
 import { pick } from "lodash";
 import { Renderable } from "./mixins/render";
 import { IContainer } from "./container";
+import { DisplayObject } from ".";
+
+// @TODO: containerable
 
 class Frame implements RenderableEntity {
     type = "frame";
     parent?: IContainer;
     id: string;
-
     scale = { x: 1, y: 1 };
+
+    // definately initialized by _render
+    baseDisplayObject!: DisplayObject;
 
     constructor(
         public x: number,

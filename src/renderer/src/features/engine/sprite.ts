@@ -1,4 +1,4 @@
-import { RootStore } from "@renderer/store";
+import { Disposer, RootStore } from "@renderer/store";
 import { RenderableEntity, makeId } from "./entity";
 import { Sprite, Texture } from "pixi.js";
 import { makeObservable, observable } from "mobx";
@@ -6,11 +6,15 @@ import { PerformantPositionable } from "./mixins/position";
 import { Scalable } from "./mixins/scale";
 import { IContainer } from "./container";
 import { Renderable } from "./mixins/render";
+import { DisplayObject } from ".";
 
 class _Sprite implements RenderableEntity {
     type = "sprite"; // @TODO: needed? maybe tags with multiple tags like sprite
     parent?: IContainer;
     id: string;
+
+    // definately initialized by _render @TODO: maybe not needed?
+    baseDisplayObject!: DisplayObject;
 
     constructor(
         public x: number,
@@ -32,9 +36,9 @@ class _Sprite implements RenderableEntity {
 
         displayObject.texture = Assets.get(this.texture);
 
-        const disposers = [];
+        const disposers = [] as Disposer[];
 
-        return { disposers, baseDisplayObject: displayObject };
+        return { disposers, baseDisplayObject: displayObject as DisplayObject };
     }
 
     _update(_rootStore: RootStore, _elapsed: number) {}

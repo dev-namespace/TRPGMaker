@@ -13,9 +13,10 @@ export { default as Container } from "./container";
 export { default as AnimatedSprite } from "./animatedSprite";
 export { default as Sprite } from "./sprite";
 
+export type DisplayObject = PIXI.DisplayObject;
 export type RenderFunction = (entity: Reactive<any>) => {
     disposers: Disposer[];
-    baseDisplayObject: PIXI.DisplayObject;
+    baseDisplayObject: DisplayObject;
 };
 
 export type UpdateFunction = (rootStore: RootStore, elapsedMS: number) => void;
@@ -84,6 +85,17 @@ export class EngineStore implements Store {
         return this.entities[entity.id] as Reactive<T>; // return the proxy
     }
 
+    register<T extends RenderableEntity>(
+        entity: T,
+        displayObject: DisplayObject,
+        disposers: Disposer[],
+    ): Reactive<T> {
+        this.entities[entity.id] = entity;
+        this.disposers[entity.id] = disposers;
+        this.displayObjects[entity.id] = displayObject;
+        return this.entities[entity.id] as Reactive<T>; // return the proxy
+    }
+
     // @TODO: I'm keeping this in case I need entities to always have access to the rootStore
     // addEntity<T extends RenderableEntity>(
     //     EntityClass: new (rootStore: RootStore, ...args: any[]) => T,
@@ -116,6 +128,7 @@ export class EngineStore implements Store {
         container.addChild(entityDisplayObject);
     }
 
+    // @TODO: this should be done in add
     addDisplayObject(entityId: string, displayObject: PIXI.DisplayObject) {
         this.displayObjects[entityId] = displayObject;
     }
@@ -126,5 +139,3 @@ export class EngineStore implements Store {
         }
     }
 }
-
-export type DisplayObject = PIXI.DisplayObject;

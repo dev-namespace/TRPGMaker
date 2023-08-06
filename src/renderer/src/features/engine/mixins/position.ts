@@ -148,7 +148,10 @@ export function PerformantPositionable<
         }
 
         setPosition(x: number, y: number) {
-            this._newPosition = { x, y };
+            this._baseDisplayObject!.x = x;
+            this._baseDisplayObject!.y = y;
+            this.x = x;
+            this.y = y;
         }
 
         moveTo(

@@ -53,7 +53,6 @@ export function Animable<TBase extends IAnimable & IRenderable>(Base: TBase) {
             });
         }
 
-        // Considerably more performant if pos is directly assigned to displayObject
         _update(_rootStore: RootStore, elapsed: number) {
             super._update(_rootStore, elapsed);
             if (this._animations.length === 0) return;

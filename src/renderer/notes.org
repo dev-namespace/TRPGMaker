@@ -1,5 +1,16 @@
 #+title: Notes
 
+* Isometric Engine
+** Camera abstraction (width, height, position)
+** World concept (Engine Container)
+- uWidth, vWidth -> width, height
+** IsometricEntity
+- zuv, centered at feet
+
+* Grid engine
+** Coordinates
+RCL -> row, column, level
+
 * Packing sprites
 Use https://github.com/dev-namespace/pixi-spritesheet-packer
 

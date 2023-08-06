@@ -1,6 +1,5 @@
 import { action, makeObservable, observable, reaction } from "mobx";
 import { GConstructor } from "./types";
-import { addReactions } from "./utils";
 
 import { Disposer, Reactive, RootStore } from "@renderer/store";
 import { DisplayObject } from "@renderer/features/engine";
@@ -10,6 +9,7 @@ export type IRenderable = GConstructor<{
     id: string;
     type: string;
     parent?: IContainer;
+    _baseDisplayObject?: DisplayObject;
     _update(rootStore: RootStore, delta: number): void;
     _render(entity: Reactive<any>): {
         disposers: Disposer[];
@@ -28,9 +28,12 @@ export function Renderable<TBase extends IRenderable>(Base: TBase) {
         }
 
         _render(rootStore: RootStore) {
-            return addReactions(
-                super._render(rootStore),
-                (_baseDisplayObject) => [
+            const { disposers, baseDisplayObject } = super._render(rootStore);
+            this._baseDisplayObject = baseDisplayObject;
+
+            const combinedDisposers = [
+                ...disposers,
+                ...[
                     reaction(
                         () => this.parent,
                         () => {
@@ -39,7 +42,9 @@ export function Renderable<TBase extends IRenderable>(Base: TBase) {
                         { fireImmediately: true },
                     ),
                 ],
-            );
+            ];
+
+            return { disposers: combinedDisposers, baseDisplayObject };
         }
 
         setParent(parent: IContainer) {

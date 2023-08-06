@@ -1,4 +1,4 @@
-import { RootStore } from "@renderer/store";
+import { Disposer, RootStore } from "@renderer/store";
 import { RenderableEntity, makeId } from "./entity";
 import { Sprite, Texture } from "pixi.js";
 import { autorun, makeObservable } from "mobx";
@@ -7,6 +7,7 @@ import { Scalable } from "./mixins/scale";
 import { Renderable } from "./mixins/render";
 import { IContainer } from "./container";
 import { Animable } from "./mixins/animation";
+import { DisplayObject } from ".";
 
 class _AnimatedSprite implements RenderableEntity {
     type = "sprite";
@@ -15,6 +16,9 @@ class _AnimatedSprite implements RenderableEntity {
     frame: number = 0;
     loop = false;
     playing = false;
+
+    // definately initialized by _render
+    baseDisplayObject!: DisplayObject;
 
     constructor(
         public x: number,
@@ -45,9 +49,9 @@ class _AnimatedSprite implements RenderableEntity {
                     displayObject.texture = Texture.EMPTY;
                 }
             }),
-        ];
+        ] as Disposer[];
 
-        return { disposers, baseDisplayObject: displayObject };
+        return { disposers, baseDisplayObject: displayObject as DisplayObject };
     }
 
     _update(_rootStore: RootStore, _delta: number) {}
