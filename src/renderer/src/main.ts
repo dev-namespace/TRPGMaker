@@ -57,7 +57,7 @@ flow(function* () {
     // frame.setPosition(100, 100);
 
     const world = Engine.add(new World(100, 100, 100, 100, 2 / 1));
-    world.setScale(1, 1);
+    world.setScale(2, 2);
     world.debugGround();
 
     yield Assets.load("pointer");
@@ -67,10 +67,10 @@ flow(function* () {
     // yield pointer.moveToUVZ(50, 50, 0, { duration: 1000 });
 
     yield Assets.load("dragon");
-    const dragon = world.add(new IsometricAnimatedSprite(5, 5, 0, "dragon"));
+    const dragon = world.add(new IsometricAnimatedSprite(95, 95, 0, "dragon"));
     dragon.animate("dragon_walking", { duration: 1000 });
     dragon.loop = true;
-    dragon.moveToUVZ(95, 5, 0, { duration: 3000 });
+    // dragon.moveToUVZ(95, 5, 0, { duration: 3000 });
 
     // const container = Engine.add(new Container(0, 0));
     // container.setScale(3, 3);

@@ -1,0 +1,522 @@
+{
+    "meta": {
+        "image": "spritesheet.png",
+        "size": {
+            "w": 192,
+            "h": 192
+        },
+        "scale": "1"
+    },
+    "frames": {
+        "dragon_attack_0": {
+            "frame": {
+                "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 48
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 48
+            },
+            "sourceSize": {
+                "w": 32,
+                "h": 48
+            }
+        },
+        "dragon_attack_1": {
+            "frame": {
+                "x": 32,
+                "y": 0,
+                "w": 32,
+                "h": 48
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 48
+            },
+            "sourceSize": {
+                "w": 32,
+                "h": 48
+            }
+        },
+        "dragon_attack_2": {
+            "frame": {
+                "x": 64,
+                "y": 0,
+                "w": 32,
+                "h": 48
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 48
+            },
+            "sourceSize": {
+                "w": 32,
+                "h": 48
+            }
+        },
+        "dragon_attack_back_0": {
+            "frame": {
+                "x": 0,
+                "y": 48,
+                "w": 32,
+                "h": 48
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 48
+            },
+            "sourceSize": {
+                "w": 32,
+                "h": 48
+            }
+        },
+        "dragon_attack_back_1": {
+            "frame": {
+                "x": 32,
+                "y": 48,
+                "w": 32,
+                "h": 48
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 48
+            },
+            "sourceSize": {
+                "w": 32,
+                "h": 48
+            }
+        },
+        "dragon_attack_back_2": {
+            "frame": {
+                "x": 64,
+                "y": 48,
+                "w": 32,
+                "h": 48
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 48
+            },
+            "sourceSize": {
+                "w": 32,
+                "h": 48
+            }
+        },
+        "dragon_die_0": {
+            "frame": {
+                "x": 96,
+                "y": 0,
+                "w": 32,
+                "h": 48
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 48
+            },
+            "sourceSize": {
+                "w": 32,
+                "h": 48
+            }
+        },
+        "dragon_die_1": {
+            "frame": {
+                "x": 96,
+                "y": 48,
+                "w": 32,
+                "h": 48
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 48
+            },
+            "sourceSize": {
+                "w": 32,
+                "h": 48
+            }
+        },
+        "dragon_die_back_0": {
+            "frame": {
+                "x": 128,
+                "y": 0,
+                "w": 32,
+                "h": 48
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 48
+            },
+            "sourceSize": {
+                "w": 32,
+                "h": 48
+            }
+        },
+        "dragon_die_back_1": {
+            "frame": {
+                "x": 128,
+                "y": 48,
+                "w": 32,
+                "h": 48
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 48
+            },
+            "sourceSize": {
+                "w": 32,
+                "h": 48
+            }
+        },
+        "dragon_idle_0": {
+            "frame": {
+                "x": 0,
+                "y": 96,
+                "w": 32,
+                "h": 48
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 48
+            },
+            "sourceSize": {
+                "w": 32,
+                "h": 48
+            }
+        },
+        "dragon_idle_back_0": {
+            "frame": {
+                "x": 32,
+                "y": 96,
+                "w": 32,
+                "h": 48
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 48
+            },
+            "sourceSize": {
+                "w": 32,
+                "h": 48
+            }
+        },
+        "dragon_jump_0": {
+            "frame": {
+                "x": 64,
+                "y": 96,
+                "w": 32,
+                "h": 48
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 48
+            },
+            "sourceSize": {
+                "w": 32,
+                "h": 48
+            }
+        },
+        "dragon_jump_1": {
+            "frame": {
+                "x": 96,
+                "y": 96,
+                "w": 32,
+                "h": 48
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 48
+            },
+            "sourceSize": {
+                "w": 32,
+                "h": 48
+            }
+        },
+        "dragon_jump_back_0": {
+            "frame": {
+                "x": 128,
+                "y": 96,
+                "w": 32,
+                "h": 48
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 48
+            },
+            "sourceSize": {
+                "w": 32,
+                "h": 48
+            }
+        },
+        "dragon_jump_back_1": {
+            "frame": {
+                "x": 160,
+                "y": 0,
+                "w": 32,
+                "h": 48
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 48
+            },
+            "sourceSize": {
+                "w": 32,
+                "h": 48
+            }
+        },
+        "dragon_walking_0": {
+            "frame": {
+                "x": 160,
+                "y": 48,
+                "w": 32,
+                "h": 48
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 48
+            },
+            "sourceSize": {
+                "w": 32,
+                "h": 48
+            }
+        },
+        "dragon_walking_1": {
+            "frame": {
+                "x": 160,
+                "y": 96,
+                "w": 32,
+                "h": 48
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 48
+            },
+            "sourceSize": {
+                "w": 32,
+                "h": 48
+            }
+        },
+        "dragon_walking_2": {
+            "frame": {
+                "x": 0,
+                "y": 144,
+                "w": 32,
+                "h": 48
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 48
+            },
+            "sourceSize": {
+                "w": 32,
+                "h": 48
+            }
+        },
+        "dragon_walking_3": {
+            "frame": {
+                "x": 32,
+                "y": 144,
+                "w": 32,
+                "h": 48
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 48
+            },
+            "sourceSize": {
+                "w": 32,
+                "h": 48
+            }
+        },
+        "dragon_walking_back_0": {
+            "frame": {
+                "x": 64,
+                "y": 144,
+                "w": 32,
+                "h": 48
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 48
+            },
+            "sourceSize": {
+                "w": 32,
+                "h": 48
+            }
+        },
+        "dragon_walking_back_1": {
+            "frame": {
+                "x": 96,
+                "y": 144,
+                "w": 32,
+                "h": 48
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 48
+            },
+            "sourceSize": {
+                "w": 32,
+                "h": 48
+            }
+        },
+        "dragon_walking_back_2": {
+            "frame": {
+                "x": 128,
+                "y": 144,
+                "w": 32,
+                "h": 48
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 48
+            },
+            "sourceSize": {
+                "w": 32,
+                "h": 48
+            }
+        },
+        "dragon_walking_back_3": {
+            "frame": {
+                "x": 160,
+                "y": 144,
+                "w": 32,
+                "h": 48
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 48
+            },
+            "sourceSize": {
+                "w": 32,
+                "h": 48
+            }
+        }
+    },
+    "animations": {
+        "dragon_attack": [
+            "dragon_attack_0",
+            "dragon_attack_1",
+            "dragon_attack_2"
+        ],
+        "dragon_attack_back": [
+            "dragon_attack_back_0",
+            "dragon_attack_back_1",
+            "dragon_attack_back_2"
+        ],
+        "dragon_die": ["dragon_die_0", "dragon_die_1"],
+        "dragon_die_back": ["dragon_die_back_0", "dragon_die_back_1"],
+        "dragon_idle": ["dragon_idle_0"],
+        "dragon_idle_back": ["dragon_idle_back_0"],
+        "dragon_jump": ["dragon_jump_0", "dragon_jump_1"],
+        "dragon_jump_back": ["dragon_jump_back_0", "dragon_jump_back_1"],
+        "dragon_walking": [
+            "dragon_walking_0",
+            "dragon_walking_1",
+            "dragon_walking_2",
+            "dragon_walking_3"
+        ],
+        "dragon_walking_back": [
+            "dragon_walking_back_0",
+            "dragon_walking_back_1",
+            "dragon_walking_back_2",
+            "dragon_walking_back_3"
+        ]
+    }
+}

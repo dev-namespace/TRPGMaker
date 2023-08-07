@@ -28,8 +28,8 @@ export function Scalable<TBase extends IScalable & IRenderable>(Base: TBase) {
         }
 
         setScale(x: number, y: number) {
-            this.scale.x += x;
-            this.scale.y += y;
+            this.scale.x = x;
+            this.scale.y = y;
         }
     };
 }

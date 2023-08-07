@@ -35,7 +35,6 @@ export function Isometric<
             });
         }
 
-        // @TODO: maybe disable this reaction when moving
         _render(rootStore: RootStore) {
             return addReactions(
                 super._render(rootStore),
@@ -67,7 +66,6 @@ export function Isometric<
             z: number,
             { duration, speed, curve = "linear" }: MovementOptions,
         ) {
-            // @TODO
             return new Promise((resolve) => {
                 const source = this.world.uvz2xy(this.UVZ);
                 const target = this.world.uvz2xy(uv(u, v, z));

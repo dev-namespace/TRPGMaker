@@ -16,6 +16,7 @@ class _AnimatedSprite implements RenderableEntity {
     frame: number = 0;
     loop = false;
     playing = false;
+    anchor = { x: 0, y: 0 };
 
     // definately initialized by _render
     baseDisplayObject!: DisplayObject;
@@ -43,6 +44,11 @@ class _AnimatedSprite implements RenderableEntity {
         const disposers = [
             autorun(() => {
                 if (this.animation) {
+                    this.anchor =
+                        spritesheet.animations[this.animation][
+                            this.frame
+                        ].defaultAnchor;
+                    displayObject.pivot.set(this.anchor.x, this.anchor.y);
                     displayObject.texture =
                         spritesheet.animations[this.animation][this.frame];
                 } else {

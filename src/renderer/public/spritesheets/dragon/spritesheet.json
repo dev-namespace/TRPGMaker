@@ -26,6 +26,10 @@
       "sourceSize": {
         "w": 32,
         "h": 48
+      },
+      "anchor": {
+        "x": 16,
+        "y": 38
       }
     },
     "dragon_attack_1": {
@@ -46,6 +50,10 @@
       "sourceSize": {
         "w": 32,
         "h": 48
+      },
+      "anchor": {
+        "x": 16,
+        "y": 38
       }
     },
     "dragon_attack_2": {
@@ -66,6 +74,10 @@
       "sourceSize": {
         "w": 32,
         "h": 48
+      },
+      "anchor": {
+        "x": 16,
+        "y": 38
       }
     },
     "dragon_attack_back_0": {
@@ -86,6 +98,10 @@
       "sourceSize": {
         "w": 32,
         "h": 48
+      },
+      "anchor": {
+        "x": 16,
+        "y": 38
       }
     },
     "dragon_attack_back_1": {
@@ -106,6 +122,10 @@
       "sourceSize": {
         "w": 32,
         "h": 48
+      },
+      "anchor": {
+        "x": 16,
+        "y": 38
       }
     },
     "dragon_attack_back_2": {
@@ -126,6 +146,10 @@
       "sourceSize": {
         "w": 32,
         "h": 48
+      },
+      "anchor": {
+        "x": 16,
+        "y": 38
       }
     },
     "dragon_die_0": {
@@ -146,6 +170,10 @@
       "sourceSize": {
         "w": 32,
         "h": 48
+      },
+      "anchor": {
+        "x": 16,
+        "y": 38
       }
     },
     "dragon_die_1": {
@@ -166,6 +194,10 @@
       "sourceSize": {
         "w": 32,
         "h": 48
+      },
+      "anchor": {
+        "x": 16,
+        "y": 38
       }
     },
     "dragon_die_back_0": {
@@ -186,6 +218,10 @@
       "sourceSize": {
         "w": 32,
         "h": 48
+      },
+      "anchor": {
+        "x": 16,
+        "y": 38
       }
     },
     "dragon_die_back_1": {
@@ -206,6 +242,10 @@
       "sourceSize": {
         "w": 32,
         "h": 48
+      },
+      "anchor": {
+        "x": 16,
+        "y": 38
       }
     },
     "dragon_idle_0": {
@@ -226,6 +266,10 @@
       "sourceSize": {
         "w": 32,
         "h": 48
+      },
+      "anchor": {
+        "x": 16,
+        "y": 38
       }
     },
     "dragon_idle_back_0": {
@@ -246,6 +290,10 @@
       "sourceSize": {
         "w": 32,
         "h": 48
+      },
+      "anchor": {
+        "x": 16,
+        "y": 38
       }
     },
     "dragon_jump_0": {
@@ -266,6 +314,10 @@
       "sourceSize": {
         "w": 32,
         "h": 48
+      },
+      "anchor": {
+        "x": 16,
+        "y": 38
       }
     },
     "dragon_jump_1": {
@@ -286,6 +338,10 @@
       "sourceSize": {
         "w": 32,
         "h": 48
+      },
+      "anchor": {
+        "x": 16,
+        "y": 38
       }
     },
     "dragon_jump_back_0": {
@@ -306,6 +362,10 @@
       "sourceSize": {
         "w": 32,
         "h": 48
+      },
+      "anchor": {
+        "x": 16,
+        "y": 38
       }
     },
     "dragon_jump_back_1": {
@@ -326,6 +386,10 @@
       "sourceSize": {
         "w": 32,
         "h": 48
+      },
+      "anchor": {
+        "x": 16,
+        "y": 38
       }
     },
     "dragon_walking_0": {
@@ -346,6 +410,10 @@
       "sourceSize": {
         "w": 32,
         "h": 48
+      },
+      "anchor": {
+        "x": 16,
+        "y": 38
       }
     },
     "dragon_walking_1": {
@@ -366,6 +434,10 @@
       "sourceSize": {
         "w": 32,
         "h": 48
+      },
+      "anchor": {
+        "x": 16,
+        "y": 38
       }
     },
     "dragon_walking_2": {
@@ -386,6 +458,10 @@
       "sourceSize": {
         "w": 32,
         "h": 48
+      },
+      "anchor": {
+        "x": 16,
+        "y": 38
       }
     },
     "dragon_walking_3": {
@@ -406,6 +482,10 @@
       "sourceSize": {
         "w": 32,
         "h": 48
+      },
+      "anchor": {
+        "x": 16,
+        "y": 38
       }
     },
     "dragon_walking_back_0": {
@@ -426,6 +506,10 @@
       "sourceSize": {
         "w": 32,
         "h": 48
+      },
+      "anchor": {
+        "x": 16,
+        "y": 38
       }
     },
     "dragon_walking_back_1": {
@@ -446,6 +530,10 @@
       "sourceSize": {
         "w": 32,
         "h": 48
+      },
+      "anchor": {
+        "x": 16,
+        "y": 38
       }
     },
     "dragon_walking_back_2": {
@@ -466,6 +554,10 @@
       "sourceSize": {
         "w": 32,
         "h": 48
+      },
+      "anchor": {
+        "x": 16,
+        "y": 38
       }
     },
     "dragon_walking_back_3": {
@@ -486,6 +578,10 @@
       "sourceSize": {
         "w": 32,
         "h": 48
+      },
+      "anchor": {
+        "x": 16,
+        "y": 38
       }
     }
   },
