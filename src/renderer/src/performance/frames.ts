@@ -1,10 +1,10 @@
+import { Frame } from "@renderer/features/engine/frame";
 import rootStore from "@renderer/store";
 
 const { Engine } = rootStore;
-import Frame from "@renderer/features/engine/frame";
 
 export function testFramePositioning(n: number) {
-    async function randomMovement(frame) {
+    async function randomMovement(frame: InstanceType<typeof Frame>) {
         const x = Math.random() * 1000;
         const y = Math.random() * 1000;
         frame.setPosition(x, y);
@@ -22,7 +22,7 @@ export function testFramePositioning(n: number) {
 }
 
 export function testFrameMovement(n: number) {
-    async function randomMovement(frame) {
+    async function randomMovement(frame: InstanceType<typeof Frame>) {
         const x = Math.random() * 1000;
         const y = Math.random() * 1000;
         await frame.moveTo(x, y, { speed: 0.2 });

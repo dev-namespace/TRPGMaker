@@ -1,4 +1,4 @@
-import { Assets, utils, Texture, Sprite } from "pixi.js";
+import { Assets } from "pixi.js";
 import { RootStore, Store } from "@renderer/store";
 import { makeAutoObservable } from "mobx";
 

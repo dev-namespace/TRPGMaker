@@ -1,8 +1,8 @@
-import { Container, DisplayObject } from "@renderer/features/engine";
+import { DisplayObject } from "@renderer/features/engine";
 import * as PIXI from "pixi.js";
 import { drawRect } from "../engine/graphics";
 import { Reactive, RootStore } from "@renderer/store";
-import { IContainer } from "../engine/container";
+import { Container, IContainer } from "../engine/container";
 import { RenderableEntity, makeId } from "../engine/entity";
 import { Renderable } from "../engine/mixins/render";
 import { PerformantPositionable } from "../engine/mixins/position";
@@ -10,10 +10,7 @@ import { Scalable } from "../engine/mixins/scale";
 import { IsometricEntity } from "./entity";
 
 // @TODO World -> IsometricSpace
-
-export type IIsometricSpace = IContainer & {};
-
-class World implements IIsometricSpace {
+class World implements IContainer {
     type = "world";
     parent?: IContainer;
     children: RenderableEntity[] = [];
@@ -42,10 +39,12 @@ class World implements IIsometricSpace {
         };
     }
 
-    uvz2xy({ u, v }: { u: number; v: number }) {
+    uvz2xy({ u, v, z = 0 }: { u: number; v: number; z?: number }) {
         const centerOffsetX = this.uWidth * this.uvzRatio;
-        const x = u * this.uvzRatio - v * this.uvzRatio + centerOffsetX;
-        const y = u + v;
+        const x = Math.round(
+            u * this.uvzRatio - v * this.uvzRatio + centerOffsetX,
+        );
+        const y = Math.round(u + v - z);
         return { x, y };
     }
 
@@ -54,31 +53,17 @@ class World implements IIsometricSpace {
         const u = (x + y * this.uvzRatio - centerOffsetX) / (2 * this.uvzRatio);
         const v =
             y - (x + y * this.uvzRatio - centerOffsetX) / (2 * this.uvzRatio);
-        return { u, v };
+        const z = 0; // Cannot be calculated from x and y
+        return { u, v, z };
     }
 
     get width() {
-        return this.uvz2xy({ u: this.uWidth, v: 0 }).x;
+        return this.uvz2xy({ u: this.uWidth, v: 0, z: 0 }).x;
     }
 
     get height() {
-        return this.uvz2xy({ u: this.uWidth, v: this.vWidth }).y;
+        return this.uvz2xy({ u: this.uWidth, v: this.vWidth, z: 0 }).y;
     }
-
-    // add(input: RenderableEntity | RenderableEntity[]) {
-    //     if (Array.isArray(input)) {
-    //         input.forEach((entity) => {
-    //             this._add(entity);
-    //         });
-    //     } else {
-    //         this._add(input);
-    //     }
-    // }
-
-    // _add(entity: RenderableEntity) {
-    //     this.children.push(entity);
-    //     entity.parent = this;
-    // }
 
     add<T extends IsometricEntity>(entity: T): Reactive<T> {
         const { Engine } = this.rootStore;
@@ -123,14 +108,6 @@ class World implements IIsometricSpace {
             color: 0x00ff00,
         });
 
-        const pointer = drawRect({
-            x: this.uvz2xy({ u: 100, v: 0 }).x - 5,
-            y: this.uvz2xy({ u: 100, v: 0 }).y - 5,
-            width: 10,
-            height: 10,
-            color: 0x0000ff,
-        });
-
         const polygon = new PIXI.Graphics();
         graphics.beginFill(0xff0000);
         graphics.drawPolygon([
@@ -142,7 +119,6 @@ class World implements IIsometricSpace {
 
         displayObject.addChild(graphics);
         displayObject.addChild(polygon);
-        // displayObject.addChild(pointer);
     }
 }
 

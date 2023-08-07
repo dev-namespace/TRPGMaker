@@ -1,6 +1,6 @@
 import { Disposer, RootStore } from "@renderer/store";
 import { RenderableEntity, makeId } from "./entity";
-import { Sprite, Texture } from "pixi.js";
+import { Sprite as PIXISprite, Texture } from "pixi.js";
 import { autorun, makeObservable, observable } from "mobx";
 import { PerformantPositionable } from "./mixins/position";
 import { Scalable } from "./mixins/scale";
@@ -31,7 +31,7 @@ class _Sprite implements RenderableEntity {
     _render(rootStore: RootStore) {
         const { Engine, Assets } = rootStore;
 
-        const displayObject = new Sprite(Texture.EMPTY);
+        const displayObject = new PIXISprite(Texture.EMPTY);
         Engine.addDisplayObject(this.id, displayObject);
 
         displayObject.texture = Assets.get(this.texture);
@@ -49,4 +49,4 @@ class _Sprite implements RenderableEntity {
     _update(_rootStore: RootStore, _elapsed: number) {}
 }
 
-export default Scalable(PerformantPositionable(Renderable(_Sprite)));
+export const Sprite = Scalable(PerformantPositionable(Renderable(_Sprite)));

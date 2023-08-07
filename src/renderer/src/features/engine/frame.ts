@@ -12,7 +12,7 @@ import { DisplayObject } from ".";
 
 // @TODO: containerable
 
-class Frame implements RenderableEntity {
+class _Frame implements RenderableEntity {
     type = "frame";
     parent?: IContainer;
     id: string;
@@ -68,4 +68,4 @@ class Frame implements RenderableEntity {
     // TODO: unserialize
 }
 
-export default Scalable(PerformantPositionable(Renderable(Frame)));
+export const Frame = Scalable(PerformantPositionable(Renderable(_Frame)));

@@ -1,14 +1,14 @@
 import rootStore from "@renderer/store";
 
 const { Engine, Assets } = rootStore;
-import Sprite from "@renderer/features/engine/sprite";
 import World from "@renderer/features/isometricEngine/world";
 import IsometricSprite from "@renderer/features/isometricEngine/sprite";
+import { Sprite } from "@renderer/features/engine/sprite";
 
 export async function testSpritePositioning(n: number) {
     Assets.add("pointer", "images/pointer.png");
     await Assets.load("pointer");
-    async function randomMovement(sprite) {
+    async function randomMovement(sprite: InstanceType<typeof Sprite>) {
         const x = Math.random() * 1000;
         const y = Math.random() * 1000;
         sprite.setPosition(x, y);
@@ -28,7 +28,7 @@ export async function testSpritePositioning(n: number) {
 export async function testSpriteMovement(n: number) {
     Assets.add("pointer", "images/pointer.png");
     await Assets.load("pointer");
-    async function randomMovement(sprite) {
+    async function randomMovement(sprite: InstanceType<typeof Sprite>) {
         const x = Math.random() * 1000;
         const y = Math.random() * 1000;
         await sprite.moveTo(x, y, { speed: 0.2, curve: "ease-in" });
@@ -46,7 +46,9 @@ export async function testSpriteMovement(n: number) {
 export async function testIsometricSpriteMovement(n: number) {
     Assets.add("pointer", "images/pointer.png");
     await Assets.load("pointer");
-    async function randomMovement(sprite) {
+    async function randomMovement(
+        sprite: InstanceType<typeof IsometricSprite>,
+    ) {
         const u = Math.random() * 100;
         const v = Math.random() * 100;
         await sprite.moveToUVZ(u, v, 0, { speed: 0.2, curve: "ease-in" });

@@ -2,19 +2,12 @@ import * as PIXI from "pixi.js";
 
 import "./assets/index.css";
 import rootStore from "./store";
-import { action, flow, runInAction, when } from "mobx";
-import { testFramePositioning, testFrames } from "./performance/frames";
-import {
-    testIsometricSpriteMovement,
-    testSpriteMovement,
-    testSpritePositioning,
-} from "./performance/sprites";
-import { AnimatedSprite, Container, Frame, Sprite } from "./features/engine";
-import { wait } from "./utils/time";
-import { uv } from "./utils/coordinates";
+import { flow, when } from "mobx";
 import World from "./features/isometricEngine/world";
 import IsometricSprite from "./features/isometricEngine/sprite";
 import IsometricAnimatedSprite from "./features/isometricEngine/animatedSprite";
+import { IsometricCamera } from "./features/isometricEngine/isometricCamera";
+import { testIsometricSpriteMovement } from "./performance/sprites";
 
 const { Engine, Assets } = rootStore;
 
@@ -56,9 +49,16 @@ flow(function* () {
     // const frame = Engine.add(new Frame(0, 0, 100, 100));
     // frame.setPosition(100, 100);
 
+    // const camera = Engine.add(new Camera(0, 0));
+    // camera.moveToFocus(100, 100, { duration: 1000 });
+
     const world = Engine.add(new World(100, 100, 100, 100, 2 / 1));
-    world.setScale(2, 2);
+    world.setScale(3, 3);
     world.debugGround();
+
+    const camera = world.add(new IsometricCamera(100, 0, 0));
+    camera.focusUVZ(50, 50, 0);
+    // camera.moveToFocusUVZ(100, 0, 0, { duration: 1000 });
 
     yield Assets.load("pointer");
     const pointer = world.add(new IsometricSprite(0, 0, 0, "pointer"));
@@ -67,10 +67,10 @@ flow(function* () {
     // yield pointer.moveToUVZ(50, 50, 0, { duration: 1000 });
 
     yield Assets.load("dragon");
-    const dragon = world.add(new IsometricAnimatedSprite(95, 95, 0, "dragon"));
+    const dragon = world.add(new IsometricAnimatedSprite(95, 95, 50, "dragon"));
     dragon.animate("dragon_walking", { duration: 1000 });
     dragon.loop = true;
-    dragon.moveToUVZ(95, 5, 0, { duration: 3000 });
+    // dragon.moveToUVZ(95, 5, 0, { duration: 3000 });
 
     // const container = Engine.add(new Container(0, 0));
     // container.setScale(3, 3);

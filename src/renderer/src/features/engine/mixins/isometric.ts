@@ -17,6 +17,28 @@ export type IIsometric = GConstructor<
     } & IPositionMixin
 >;
 
+export type IIsometricMixin = {
+    u: number;
+    v: number;
+    z: number;
+    world: InstanceType<typeof World>;
+    UVZ: vec2;
+    setUVZ(
+        u: number,
+        v: number,
+        z?: number,
+        scale?: { x: number; y: number },
+    ): void;
+    moveToUVZ(
+        u: number,
+        v: number,
+        z: number,
+        options: MovementOptions,
+        scale?: { x: number; y: number },
+    ): Promise<void>;
+    _assignWorld(world: InstanceType<typeof World>): void;
+};
+
 export function Isometric<
     TBase extends IIsometric & IPositionable & IRenderable,
 >(Base: TBase) {
@@ -48,9 +70,9 @@ export function Isometric<
             this.world = world;
         }
 
-        setUVZ(u: number, v: number, z: number = 0) {
+        setUVZ(u: number, v: number, z: number = 0, scale = { x: 1, y: 1 }) {
             const { x, y } = this.world.uvz2xy(uv(u, v, z));
-            this.setPosition(x, y);
+            this.setPosition(x * scale.x, y * scale.y);
         }
 
         moveToUVZ(

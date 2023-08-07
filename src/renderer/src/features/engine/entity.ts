@@ -1,15 +1,19 @@
-import { Disposer, RootStore } from "@renderer/store";
 import { v4 as uuid } from "uuid";
 import { RenderFunction, UpdateFunction } from ".";
 import { IContainer } from "./container";
-import { DisplayObject } from "pixi.js";
 
-export interface RenderableEntity {
+export interface Entity {
     id: string;
     type: string; // @TODO: needed?
-    parent?: IContainer;
-    _render: RenderFunction;
+}
+
+export interface UpdatableEntity extends Entity {
     _update: UpdateFunction;
+    _render: RenderFunction;
+}
+
+export interface RenderableEntity extends UpdatableEntity {
+    parent?: IContainer;
 }
 
 export interface EngineEntity {
@@ -19,11 +23,4 @@ export interface EngineEntity {
 
 export function makeId() {
     return uuid();
-}
-
-export function makeEntity(properties): EngineEntity {
-    return {
-        ...properties,
-        id: uuid(),
-    };
 }

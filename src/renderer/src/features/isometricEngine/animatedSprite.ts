@@ -1,8 +1,9 @@
 import { Disposer, RootStore } from "@renderer/store";
-import { AnimatedSprite, DisplayObject } from "../engine";
+import { DisplayObject } from "../engine";
 import { Isometric } from "../engine/mixins/isometric";
 import World from "./world";
 import { uv, xy } from "@renderer/utils/coordinates";
+import { AnimatedSprite } from "../engine/animatedSprite";
 
 class IsometricAnimatedSprite extends AnimatedSprite {
     type = "isometric-sprite"; // @TODO: needed? maybe tags with multiple tags like sprite

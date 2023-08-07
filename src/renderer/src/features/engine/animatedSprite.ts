@@ -61,6 +61,6 @@ class _AnimatedSprite implements RenderableEntity {
     _update(_rootStore: RootStore, _delta: number) {}
 }
 
-export default Animable(
+export const AnimatedSprite = Animable(
     Scalable(PerformantPositionable(Renderable(_AnimatedSprite))),
 );

@@ -4,14 +4,8 @@ import * as PIXI from "pixi.js";
 import "@pixi/unsafe-eval";
 
 import { makeAutoObservable } from "mobx";
-import { EngineEntity, RenderableEntity } from "./entity";
+import { EngineEntity, RenderableEntity, UpdatableEntity } from "./entity";
 import { Store, RootStore, Reactive, Disposer } from "@renderer/store";
-
-// Intellisense help
-export { default as Frame } from "./frame";
-export { default as Container } from "./container";
-export { default as AnimatedSprite } from "./animatedSprite";
-export { default as Sprite } from "./sprite";
 
 export type DisplayObject = PIXI.DisplayObject;
 export type RenderFunction = (entity: Reactive<any>) => {
@@ -77,7 +71,8 @@ export class EngineStore implements Store {
     //     return this.entities[entity.id];
     // }
 
-    add<T extends RenderableEntity>(entity: T): Reactive<T> {
+    // @TODO: Renderable or Updatable?
+    add<T extends UpdatableEntity>(entity: T): Reactive<T> {
         this.entities[entity.id] = entity;
         const result = entity._render(this.rootStore);
         const disposers = result.disposers;

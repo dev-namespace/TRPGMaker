@@ -1,6 +1,6 @@
 import { RootStore } from "@renderer/store";
 import { RenderableEntity, makeId } from "./entity";
-import { Container } from "pixi.js";
+import { Container as PIXIContainer } from "pixi.js";
 import { makeObservable } from "mobx";
 import { PerformantPositionable } from "./mixins/position";
 import { Scalable } from "./mixins/scale";
@@ -19,7 +19,7 @@ class _Container implements RenderableEntity, IContainer {
 
     // definately initialized by _render
     rootStore!: RootStore;
-    baseDisplayObject!: Container;
+    baseDisplayObject!: PIXIContainer;
 
     constructor(
         public x: number,
@@ -49,7 +49,7 @@ class _Container implements RenderableEntity, IContainer {
         this.rootStore = rootStore;
         const { Engine } = rootStore;
 
-        const displayObject = new Container();
+        const displayObject = new PIXIContainer();
         Engine.addDisplayObject(this.id, displayObject);
 
         const disposers = [];
@@ -60,4 +60,6 @@ class _Container implements RenderableEntity, IContainer {
     _update(_rootStore: RootStore, _elapsedMS: number) {}
 }
 
-export default Scalable(PerformantPositionable(Renderable(_Container)));
+export const Container = Scalable(
+    PerformantPositionable(Renderable(_Container)),
+);
