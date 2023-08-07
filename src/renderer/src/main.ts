@@ -70,7 +70,7 @@ flow(function* () {
     const dragon = world.add(new IsometricAnimatedSprite(95, 95, 0, "dragon"));
     dragon.animate("dragon_walking", { duration: 1000 });
     dragon.loop = true;
-    // dragon.moveToUVZ(95, 5, 0, { duration: 3000 });
+    dragon.moveToUVZ(95, 5, 0, { duration: 3000 });
 
     // const container = Engine.add(new Container(0, 0));
     // container.setScale(3, 3);

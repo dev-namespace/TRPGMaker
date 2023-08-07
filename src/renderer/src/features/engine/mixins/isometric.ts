@@ -1,32 +1,26 @@
 import { RootStore } from "@renderer/store";
-import {
-    action,
-    autorun,
-    computed,
-    makeObservable,
-    observable,
-    runInAction,
-} from "mobx";
+import { action, computed, makeObservable } from "mobx";
 import { GConstructor } from "./types";
-import curves from "@renderer/utils/curves";
 import { vec2 } from "gl-matrix";
 import { IRenderable } from "./render";
-import { IPositionable, MovementOptions } from "./position";
+import { IPositionMixin, IPositionable, MovementOptions } from "./position";
 import World from "@renderer/features/isometricEngine/world";
 import { uv, xy } from "@renderer/utils/coordinates";
 import { addReactions } from "./utils";
 
-export type IIsometric = GConstructor<{
-    u: number;
-    v: number;
-    z: number;
-    world: InstanceType<typeof World>;
-}>;
+export type IIsometric = GConstructor<
+    {
+        u: number;
+        v: number;
+        z: number;
+        world: InstanceType<typeof World>;
+    } & IPositionMixin
+>;
 
 export function Isometric<
     TBase extends IIsometric & IPositionable & IRenderable,
 >(Base: TBase) {
-    return class extends Base {
+    return class Isometric extends Base {
         constructor(...args: any[]) {
             super(...args);
             makeObservable(this, {
@@ -56,7 +50,6 @@ export function Isometric<
 
         setUVZ(u: number, v: number, z: number = 0) {
             const { x, y } = this.world.uvz2xy(uv(u, v, z));
-            // @ts-ignore @TODO: fix
             this.setPosition(x, y);
         }
 
@@ -78,7 +71,6 @@ export function Isometric<
                 }
                 if (!duration)
                     throw new Error("duration or speed must be provided");
-                // @ts-ignore: @TODO
                 this._movements.push({
                     source: vec2.fromValues(source.x, source.y),
                     target: vec2.fromValues(target.x, target.y),

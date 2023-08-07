@@ -30,9 +30,6 @@ class IsometricSprite extends Sprite {
     _render(rootStore: RootStore) {
         const { baseDisplayObject, disposers } = super._render(rootStore);
 
-        // const texture = rootStore.Assets.get(this.texture);
-        // console.log("!2 texture", texture);
-
         const { x, y } = this.world.uvz2xy(this._initial_position);
         this.setPosition(x, y);
 

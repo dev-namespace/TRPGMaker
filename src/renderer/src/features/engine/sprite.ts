@@ -1,7 +1,7 @@
 import { Disposer, RootStore } from "@renderer/store";
 import { RenderableEntity, makeId } from "./entity";
 import { Sprite, Texture } from "pixi.js";
-import { makeObservable, observable } from "mobx";
+import { autorun, makeObservable, observable } from "mobx";
 import { PerformantPositionable } from "./mixins/position";
 import { Scalable } from "./mixins/scale";
 import { IContainer } from "./container";
@@ -36,7 +36,12 @@ class _Sprite implements RenderableEntity {
 
         displayObject.texture = Assets.get(this.texture);
 
-        const disposers = [] as Disposer[];
+        const disposers = [
+            autorun(() => {
+                const anchor = Assets.get(this.texture).defaultAnchor;
+                displayObject.pivot.set(anchor.x, anchor.y);
+            }),
+        ] as Disposer[];
 
         return { disposers, baseDisplayObject: displayObject as DisplayObject };
     }

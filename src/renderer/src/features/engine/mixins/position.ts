@@ -25,10 +25,18 @@ export interface Movement {
 
 export type IPositionable = GConstructor<{ x: number; y: number }>;
 
+export interface IPositionMixin {
+    x: number;
+    y: number;
+    _movements: Movement[];
+    setPosition(x: number, y: number): void;
+    moveTo(x: number, y: number, options: MovementOptions): Promise<void>;
+}
+
 export function Positionable<TBase extends IPositionable & IRenderable>(
     Base: TBase,
 ) {
-    return class extends Base {
+    return class Positionable extends Base implements IPositionMixin {
         _movements: Movement[] = [];
 
         constructor(...args: any[]) {
@@ -41,7 +49,6 @@ export function Positionable<TBase extends IPositionable & IRenderable>(
             });
         }
 
-        // Considerably more performant if pos is directly assigned to displayObject
         _update(_rootStore: RootStore, delta: number) {
             super._update(_rootStore, delta);
             if (this._movements.length === 0) return;
@@ -72,7 +79,7 @@ export function Positionable<TBase extends IPositionable & IRenderable>(
         }
 
         moveTo(x: number, y: number, { duration, speed }: MovementOptions) {
-            return new Promise((resolve) => {
+            return new Promise<void>((resolve) => {
                 if (speed) {
                     duration =
                         Math.sqrt(
@@ -98,7 +105,7 @@ export function Positionable<TBase extends IPositionable & IRenderable>(
 export function PerformantPositionable<
     TBase extends IPositionable & IRenderable,
 >(Base: TBase) {
-    return class extends Base {
+    return class extends Base implements IPositionMixin {
         _movements: Movement[] = [];
         _newPosition?: { x: number; y: number };
 
@@ -159,7 +166,7 @@ export function PerformantPositionable<
             y: number,
             { duration, speed, curve = "linear" }: MovementOptions,
         ) {
-            return new Promise((resolve) => {
+            return new Promise<void>((resolve) => {
                 if (speed) {
                     duration =
                         Math.sqrt(

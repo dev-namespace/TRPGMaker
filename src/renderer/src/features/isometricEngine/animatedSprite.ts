@@ -43,14 +43,11 @@ class IsometricAnimatedSprite extends AnimatedSprite {
     }
 
     get UVZ() {
-        console.log("!2 getting UVZ");
         return this.world.xy2uvz(xy(this.x, this.y));
     }
 
     setUVZ(u: number, v: number, z: number = 0) {
-        console.log("!2 setting UVZ");
         const { x, y } = this.world.uvz2xy(uv(u, v, z));
-        // @ts-ignore @TODO: fix
         this.setPosition(x, y);
     }
 
