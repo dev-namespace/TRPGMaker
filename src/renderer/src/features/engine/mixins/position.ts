@@ -105,7 +105,7 @@ export function Positionable<TBase extends IPositionable & IRenderable>(
 export function PerformantPositionable<
     TBase extends IPositionable & IRenderable,
 >(Base: TBase) {
-    return class extends Base implements IPositionMixin {
+    return class PerformantPositionable extends Base implements IPositionMixin {
         _movements: Movement[] = [];
         _newPosition?: { x: number; y: number };
 

@@ -35,7 +35,7 @@ export type IAnimable = GConstructor<{
 }>;
 
 export function Animable<TBase extends IAnimable & IRenderable>(Base: TBase) {
-    return class extends Base {
+    return class Animable extends Base {
         _animations: Animation[] = [];
 
         constructor(...args: any[]) {
