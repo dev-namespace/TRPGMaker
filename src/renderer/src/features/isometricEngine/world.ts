@@ -61,6 +61,7 @@ class _World implements IContainer {
     //     return u + v + z;
     // }
 
+    // @TODO Make this work for any isometric angle
     getZIndex({ u, v, z = 0 }: { u: number; v: number; z?: number }) {
         u = u % 1 > 0.15 ? Math.ceil(u) : Math.floor(u);
         v = v % 1 > 0.15 ? Math.ceil(v) : Math.floor(v);

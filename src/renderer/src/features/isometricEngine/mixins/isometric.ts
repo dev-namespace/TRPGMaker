@@ -6,8 +6,9 @@ import {
     observable,
     runInAction,
 } from "mobx";
-import { vec2 } from "gl-matrix";
-import { uv, xy } from "@renderer/utils/coordinates";
+import { vec2, vec3 } from "gl-matrix";
+import curves from "@renderer/utils/curves";
+import { uv } from "@renderer/utils/coordinates";
 import {
     IPositionMixin,
     IPositionable,
@@ -28,12 +29,22 @@ export type IIsometric = GConstructor<
     } & IPositionMixin
 >;
 
+export interface MovementUVZ {
+    source: vec3;
+    target: vec3;
+    elapsed: number;
+    duration: number;
+    curve: keyof typeof curves;
+    callback?: Function;
+}
+
 export type IIsometricMixin = {
     u: number;
     v: number;
     z: number;
     world: InstanceType<typeof World>;
     UVZ: vec2;
+    _movementsUVZ: MovementUVZ[];
     setUVZ(
         u: number,
         v: number,
@@ -54,6 +65,8 @@ export function Isometric<
     TBase extends IIsometric & IPositionable & IRenderable,
 >(Base: TBase) {
     return class Isometric extends Base {
+        _movementsUVZ: MovementUVZ[] = [];
+
         constructor(...args: any[]) {
             super(...args);
             makeObservable(this, {
@@ -71,14 +84,31 @@ export function Isometric<
         }
 
         get UVZ() {
-            return this.world.xy2uvz(xy(this.x, this.y));
+            return uv(this.u, this.v, this.z);
         }
 
-        _update(_rootStore: RootStore, _elaspedMS: number) {
-            super._update(_rootStore, _elaspedMS);
+        _update(_rootStore: RootStore, elapsedMS: number) {
+            super._update(_rootStore, elapsedMS);
             runInAction(() => {
-                // @TODO maybe I should update this only when movement is being done?
                 this.zIndex = this.world.getZIndex(this.UVZ);
+
+                if (this._movementsUVZ.length === 0) return;
+                const movement = this._movementsUVZ[0];
+                movement.elapsed += elapsedMS; // @TODO round?
+                [this.u, this.v, this.z] = vec3.lerp(
+                    vec3.create(),
+                    movement.source,
+                    movement.target,
+                    curves.linear(
+                        Math.min(movement.elapsed, movement.duration),
+                        movement.duration,
+                    ),
+                );
+
+                if (movement.elapsed >= movement.duration) {
+                    movement.callback?.();
+                    this._movements.shift();
+                }
             });
         }
 
@@ -89,6 +119,9 @@ export function Isometric<
         setUVZ(u: number, v: number, z: number = 0, scale = { x: 1, y: 1 }) {
             const { x, y } = this.world.uvz2xy(uv(u, v, z));
             this.setPosition(x * scale.x, y * scale.y);
+            this.u = u;
+            this.v = v;
+            this.z = z;
         }
 
         moveToUVZ(
@@ -112,6 +145,15 @@ export function Isometric<
                 this._movements.push({
                     source: vec2.fromValues(source.x, source.y),
                     target: vec2.fromValues(target.x, target.y),
+                    elapsed: 0,
+                    duration: duration,
+                    curve: curve,
+                    callback: resolve,
+                });
+
+                this._movementsUVZ.push({
+                    source: vec3.fromValues(this.UVZ.u, this.UVZ.v, this.UVZ.z),
+                    target: vec3.fromValues(u, v, z),
                     elapsed: 0,
                     duration: duration,
                     curve: curve,
