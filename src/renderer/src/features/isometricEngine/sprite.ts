@@ -1,13 +1,14 @@
 import { RootStore } from "@renderer/store";
 import { DisplayObject } from "../engine";
-import { Isometric } from "../engine/mixins/isometric";
-import World from "./world";
 import { Sprite } from "../engine/sprite";
+import { Isometric } from "./mixins/isometric";
+import { World } from "./world";
 
 class IsometricSprite extends Sprite {
     type = "isometric-sprite"; // @TODO: needed? maybe tags with multiple tags like sprite
     x: number = 0;
     y: number = 0;
+    zIndex: number = 0;
     _initial_position: { u: number; v: number; z: number } = {
         u: 0,
         v: 0,

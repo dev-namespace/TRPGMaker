@@ -9,8 +9,8 @@ import { PerformantPositionable } from "../engine/mixins/position";
 import { Scalable } from "../engine/mixins/scale";
 import { IsometricEntity } from "./entity";
 
-// @TODO World -> IsometricSpace
-class World implements IContainer {
+// TODO World -> IsometricSpace
+class _World implements IContainer {
     type = "world";
     parent?: IContainer;
     children: RenderableEntity[] = [];
@@ -55,6 +55,16 @@ class World implements IContainer {
             y - (x + y * this.uvzRatio - centerOffsetX) / (2 * this.uvzRatio);
         const z = 0; // Cannot be calculated from x and y
         return { u, v, z };
+    }
+
+    // getZIndex({ u, v, z = 0 }: { u: number; v: number; z?: number }) {
+    //     return u + v + z;
+    // }
+
+    getZIndex({ u, v, z = 0 }: { u: number; v: number; z?: number }) {
+        u = u % 1 > 0.15 ? Math.ceil(u) : Math.floor(u);
+        v = v % 1 > 0.15 ? Math.ceil(v) : Math.floor(v);
+        return (u + v) * 100 + z * 10;
     }
 
     get width() {
@@ -122,4 +132,4 @@ class World implements IContainer {
     }
 }
 
-export default Scalable(PerformantPositionable(Renderable(World)));
+export const World = Scalable(PerformantPositionable(Renderable(_World)));

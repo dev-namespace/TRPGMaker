@@ -1,12 +1,22 @@
 import { RootStore } from "@renderer/store";
-import { action, computed, makeObservable } from "mobx";
-import { GConstructor } from "./types";
+import {
+    action,
+    computed,
+    makeObservable,
+    observable,
+    runInAction,
+} from "mobx";
 import { vec2 } from "gl-matrix";
-import { IRenderable } from "./render";
-import { IPositionMixin, IPositionable, MovementOptions } from "./position";
-import World from "@renderer/features/isometricEngine/world";
 import { uv, xy } from "@renderer/utils/coordinates";
-import { addReactions } from "./utils";
+import {
+    IPositionMixin,
+    IPositionable,
+    MovementOptions,
+} from "@renderer/features/engine/mixins/position";
+import { GConstructor } from "@renderer/features/engine/mixins/types";
+import { IRenderable } from "@renderer/features/engine/mixins/render";
+import { addReactions } from "@renderer/features/engine/mixins/utils";
+import { World } from "../world";
 
 export type IIsometric = GConstructor<
     {
@@ -14,6 +24,7 @@ export type IIsometric = GConstructor<
         v: number;
         z: number;
         world: InstanceType<typeof World>;
+        zIndex: number;
     } & IPositionMixin
 >;
 
@@ -46,6 +57,7 @@ export function Isometric<
         constructor(...args: any[]) {
             super(...args);
             makeObservable(this, {
+                zIndex: observable,
                 UVZ: computed,
                 setUVZ: action,
             });
@@ -64,6 +76,10 @@ export function Isometric<
 
         _update(_rootStore: RootStore, _elaspedMS: number) {
             super._update(_rootStore, _elaspedMS);
+            runInAction(() => {
+                // @TODO maybe I should update this only when movement is being done?
+                this.zIndex = this.world.getZIndex(this.UVZ);
+            });
         }
 
         _assignWorld(world: any) {

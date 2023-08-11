@@ -33,3 +33,4 @@ However, independent 'rootstores' can be created in order to enable features suc
 ** MobX impact
 1000 frame entities moving -> 53% CPU
 1000 frame entities moving (mobX) -> 70% CPU
+** Reordering based on zIndex is very expensive

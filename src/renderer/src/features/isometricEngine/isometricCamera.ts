@@ -1,18 +1,19 @@
 import { autorun, makeObservable } from "mobx";
 import { Disposer, RootStore } from "@renderer/store";
-import { IIsometricMixin, Isometric } from "../engine/mixins/isometric";
-import World from "@renderer/features/isometricEngine/world";
 import { makeId } from "../engine/entity";
 import { uv, xy } from "@renderer/utils/coordinates";
 import { DisplayObject } from "pixi.js";
 import { MovementOptions } from "../engine/mixins/position";
 import { Camera } from "../engine/camera";
+import { IIsometricMixin, Isometric } from "./mixins/isometric";
+import { World } from "./world";
 
 class _IsometricCamera extends Camera {
     type = "camera";
     id: string;
     width: number = 0;
     height: number = 0;
+    zIndex: number = 0;
     declare moveToUVZ: IIsometricMixin["moveToUVZ"];
     declare setUVZ: IIsometricMixin["setUVZ"];
 

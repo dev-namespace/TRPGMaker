@@ -50,6 +50,7 @@ class _Container implements RenderableEntity, IContainer {
         const { Engine } = rootStore;
 
         const displayObject = new PIXIContainer();
+        displayObject.sortableChildren = true;
         Engine.addDisplayObject(this.id, displayObject);
 
         const disposers = [];

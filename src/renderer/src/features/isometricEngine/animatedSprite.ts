@@ -1,14 +1,16 @@
 import { Disposer, RootStore } from "@renderer/store";
 import { DisplayObject } from "../engine";
-import { Isometric } from "../engine/mixins/isometric";
-import World from "./world";
 import { uv, xy } from "@renderer/utils/coordinates";
 import { AnimatedSprite } from "../engine/animatedSprite";
+import { Isometric } from "./mixins/isometric";
+import { World } from "./world";
+import { autorun } from "mobx";
 
 class IsometricAnimatedSprite extends AnimatedSprite {
     type = "isometric-sprite"; // @TODO: needed? maybe tags with multiple tags like sprite
     x: number = 0;
     y: number = 0;
+    zIndex: number = 0;
     _initial_position: { u: number; v: number; z: number } = {
         u: 0,
         v: 0,
@@ -35,7 +37,12 @@ class IsometricAnimatedSprite extends AnimatedSprite {
         let { x, y } = this.world.uvz2xy(this._initial_position);
         this.setPosition(x, y);
 
-        const composedDisposers = disposers as Disposer[];
+        const composedDisposers = [
+            ...disposers,
+            autorun(() => {
+                baseDisplayObject.zIndex = this.zIndex;
+            }),
+        ] as Disposer[];
 
         return {
             disposers: composedDisposers,
@@ -43,6 +50,7 @@ class IsometricAnimatedSprite extends AnimatedSprite {
         };
     }
 
+    // @TODO this wont make it. I need to know z and it cannot be derived from xy
     get UVZ() {
         return this.world.xy2uvz(xy(this.x, this.y));
     }
