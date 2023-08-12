@@ -21,9 +21,6 @@ import { World } from "../world";
 
 export type IIsometric = GConstructor<
     {
-        u: number;
-        v: number;
-        z: number;
         world: InstanceType<typeof World>;
         zIndex: number;
     } & IPositionMixin
@@ -65,6 +62,9 @@ export function Isometric<
     TBase extends IIsometric & IPositionable & IRenderable,
 >(Base: TBase) {
     return class Isometric extends Base {
+        #u: number = 0;
+        #v: number = 0;
+        #z: number = 0;
         _movementsUVZ: MovementUVZ[] = [];
 
         constructor(...args: any[]) {
@@ -83,8 +83,9 @@ export function Isometric<
             );
         }
 
+        // @TODO rename methods
         get UVZ() {
-            return uv(this.u, this.v, this.z);
+            return uv(this.#u, this.#v, this.#z);
         }
 
         _update(_rootStore: RootStore, elapsedMS: number) {
@@ -95,7 +96,7 @@ export function Isometric<
                 if (this._movementsUVZ.length === 0) return;
                 const movement = this._movementsUVZ[0];
                 movement.elapsed += elapsedMS; // @TODO round?
-                [this.u, this.v, this.z] = vec3.lerp(
+                const [u, v, z] = vec3.lerp(
                     vec3.create(),
                     movement.source,
                     movement.target,
@@ -105,9 +106,11 @@ export function Isometric<
                     ),
                 );
 
+                this.setUVZ(u, v, z);
+
                 if (movement.elapsed >= movement.duration) {
                     movement.callback?.();
-                    this._movements.shift();
+                    this._movementsUVZ.shift();
                 }
             });
         }
@@ -119,9 +122,9 @@ export function Isometric<
         setUVZ(u: number, v: number, z: number = 0, scale = { x: 1, y: 1 }) {
             const { x, y } = this.world.uvz2xy(uv(u, v, z));
             this.setPosition(x * scale.x, y * scale.y);
-            this.u = u;
-            this.v = v;
-            this.z = z;
+            this.#u = u;
+            this.#v = v;
+            this.#z = z;
         }
 
         moveToUVZ(
@@ -142,14 +145,6 @@ export function Isometric<
                 }
                 if (!duration)
                     throw new Error("duration or speed must be provided");
-                this._movements.push({
-                    source: vec2.fromValues(source.x, source.y),
-                    target: vec2.fromValues(target.x, target.y),
-                    elapsed: 0,
-                    duration: duration,
-                    curve: curve,
-                    callback: resolve,
-                });
 
                 this._movementsUVZ.push({
                     source: vec3.fromValues(this.UVZ.u, this.UVZ.v, this.UVZ.z),

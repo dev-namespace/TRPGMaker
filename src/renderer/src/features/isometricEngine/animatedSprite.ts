@@ -21,9 +21,9 @@ class IsometricAnimatedSprite extends AnimatedSprite {
     world!: InstanceType<typeof World>;
 
     constructor(
-        public u: number,
-        public v: number,
-        public z: number,
+        u: number,
+        v: number,
+        z: number,
         public spritesheet: string,
         public scale = { x: 1, y: 1 },
     ) {
@@ -34,8 +34,13 @@ class IsometricAnimatedSprite extends AnimatedSprite {
     _render(rootStore: RootStore) {
         const { baseDisplayObject, disposers } = super._render(rootStore);
 
-        let { x, y } = this.world.uvz2xy(this._initial_position);
-        this.setPosition(x, y);
+        this.setUVZ(
+            this._initial_position.u,
+            this._initial_position.v,
+            this._initial_position.z,
+        );
+        // let { x, y } = this.world.uvz2xy(this._initial_position);
+        // this.setPosition(x, y);
 
         const composedDisposers = [
             ...disposers,
