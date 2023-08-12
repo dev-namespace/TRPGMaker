@@ -20,6 +20,7 @@ class _AnimatedSprite implements RenderableEntity {
     // definately initialized by _render
     baseDisplayObject!: DisplayObject;
 
+    // @TODO: fix x, y are not being taken into account
     constructor(
         public x: number,
         public y: number,

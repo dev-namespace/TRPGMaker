@@ -49,7 +49,7 @@ export async function testIsometricSpriteMovement(n: number) {
     ) {
         const u = Math.random() * 100;
         const v = Math.random() * 100;
-        await sprite.moveToUVZ(u, v, 0, { speed: 0.2, curve: "ease-in" });
+        await sprite.moveToUVW(u, v, 0, { speed: 0.2, curve: "ease-in" });
         randomMovement(sprite);
     }
     const world = Engine.add(new World(100, 100, 100, 100, 2 / 1));

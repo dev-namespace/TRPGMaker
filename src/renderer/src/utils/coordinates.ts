@@ -1,5 +1,16 @@
-export function uv(u: number, v: number, z: number = 0) {
-    return { u, v, z };
+export type UVW = {
+    u: number;
+    v: number;
+    w: number;
+};
+
+export type XY = {
+    x: number;
+    y: number;
+};
+
+export function uv(u: number, v: number, w: number = 0) {
+    return { u, v, w };
 }
 
 export function xy(x: number, y: number) {

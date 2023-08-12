@@ -14,8 +14,8 @@ class _IsometricCamera extends Camera {
     width: number = 0;
     height: number = 0;
     zIndex: number = 0;
-    declare moveToUVZ: IIsometricMixin["moveToUVZ"];
-    declare setUVZ: IIsometricMixin["setUVZ"];
+    declare moveToUVW: IIsometricMixin["moveToUVW"];
+    declare setPositionUVW: IIsometricMixin["setUVW"];
 
     // definately initialized by _render
     world!: InstanceType<typeof World>;
@@ -30,28 +30,28 @@ class _IsometricCamera extends Camera {
         this.id = makeId();
     }
 
-    focusUVZ(u: number, v: number, z: number) {
-        const { x, y } = this.world.uvz2xy(uv(u, v, z));
+    focusUVW(u: number, v: number, z: number) {
+        const { x, y } = this.world.uvw2xy(uv(u, v, z));
         const correctedX = x * this.world.scale.x - this.width / 2;
         const correctedY = y * this.world.scale.y - this.height / 2;
         const {
             u: correctedU,
             v: correctedV,
             z: correctedZ,
-        } = this.world.xy2uvz(xy(correctedX, correctedY));
-        this.setUVZ(correctedU, correctedV, correctedZ);
+        } = this.world.xy2uvw(xy(correctedX, correctedY));
+        this.setPositionUVW(correctedU, correctedV, correctedZ);
     }
 
-    moveToFocusUVZ(u: number, v: number, z: number, options: MovementOptions) {
-        const { x, y } = this.world.uvz2xy(uv(u, v, z));
+    moveToFocusUVW(u: number, v: number, z: number, options: MovementOptions) {
+        const { x, y } = this.world.uvw2xy(uv(u, v, z));
         const correctedX = x * this.world.scale.x - this.width / 2;
         const correctedY = y * this.world.scale.y - this.height / 2;
         const {
             u: correctedU,
             v: correctedV,
             z: correctedZ,
-        } = this.world.xy2uvz(xy(correctedX, correctedY));
-        return this.moveToUVZ(correctedU, correctedV, correctedZ, options);
+        } = this.world.xy2uvw(xy(correctedX, correctedY));
+        return this.moveToUVW(correctedU, correctedV, correctedZ, options);
     }
 
     _render(rootStore: RootStore) {

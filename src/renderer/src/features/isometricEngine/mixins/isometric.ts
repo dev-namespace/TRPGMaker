@@ -8,7 +8,7 @@ import {
 } from "mobx";
 import { vec2, vec3 } from "gl-matrix";
 import curves from "@renderer/utils/curves";
-import { uv } from "@renderer/utils/coordinates";
+import { uv, xy } from "@renderer/utils/coordinates";
 import {
     IPositionMixin,
     IPositionable,
@@ -26,7 +26,7 @@ export type IIsometric = GConstructor<
     } & IPositionMixin
 >;
 
-export interface MovementUVZ {
+export interface MovementUVW {
     source: vec3;
     target: vec3;
     elapsed: number;
@@ -38,20 +38,20 @@ export interface MovementUVZ {
 export type IIsometricMixin = {
     u: number;
     v: number;
-    z: number;
+    w: number;
     world: InstanceType<typeof World>;
-    UVZ: vec2;
-    _movementsUVZ: MovementUVZ[];
-    setUVZ(
+    UVW: vec2;
+    isometricMovements: MovementUVW[];
+    setPositionUVW(
         u: number,
         v: number,
-        z?: number,
+        w?: number,
         scale?: { x: number; y: number },
     ): void;
-    moveToUVZ(
+    moveToUVW(
         u: number,
         v: number,
-        z: number,
+        w: number,
         options: MovementOptions,
         scale?: { x: number; y: number },
     ): Promise<void>;
@@ -62,17 +62,19 @@ export function Isometric<
     TBase extends IIsometric & IPositionable & IRenderable,
 >(Base: TBase) {
     return class Isometric extends Base {
-        #u: number = 0;
-        #v: number = 0;
-        #z: number = 0;
-        _movementsUVZ: MovementUVZ[] = [];
+        #w: number = 0;
+        #isometricMovements: MovementUVW[] = [];
 
         constructor(...args: any[]) {
             super(...args);
             makeObservable(this, {
                 zIndex: observable,
-                UVZ: computed,
-                setUVZ: action,
+                u: computed,
+                v: computed,
+                w: computed,
+                isometricPosition: computed,
+                UVW: computed,
+                setPositionUVW: action,
             });
         }
 
@@ -83,20 +85,19 @@ export function Isometric<
             );
         }
 
-        // @TODO rename methods
-        get UVZ() {
-            return uv(this.#u, this.#v, this.#z);
+        get UVW() {
+            return uv(this.u, this.v, this.#w);
         }
 
         _update(_rootStore: RootStore, elapsedMS: number) {
             super._update(_rootStore, elapsedMS);
             runInAction(() => {
-                this.zIndex = this.world.getZIndex(this.UVZ);
+                this.zIndex = this.world.getZIndex(this.isometricPosition);
 
-                if (this._movementsUVZ.length === 0) return;
-                const movement = this._movementsUVZ[0];
+                if (this.#isometricMovements.length === 0) return;
+                const movement = this.#isometricMovements[0];
                 movement.elapsed += elapsedMS; // @TODO round?
-                const [u, v, z] = vec3.lerp(
+                const [u, v, w] = vec3.lerp(
                     vec3.create(),
                     movement.source,
                     movement.target,
@@ -106,36 +107,55 @@ export function Isometric<
                     ),
                 );
 
-                this.setUVZ(u, v, z);
+                this.setPositionUVW(u, v, w);
 
                 if (movement.elapsed >= movement.duration) {
                     movement.callback?.();
-                    this._movementsUVZ.shift();
+                    this.#isometricMovements.shift();
                 }
             });
+        }
+
+        get u() {
+            return this.world.xy2u(xy(this.x, this.y), this.#w);
+        }
+
+        get v() {
+            return this.world.xy2v(xy(this.x, this.y), this.#w);
+        }
+
+        get w() {
+            return this.#w;
+        }
+
+        get isometricPosition() {
+            return { u: this.u, v: this.v, w: this.w };
         }
 
         _assignWorld(world: any) {
             this.world = world;
         }
 
-        setUVZ(u: number, v: number, z: number = 0, scale = { x: 1, y: 1 }) {
-            const { x, y } = this.world.uvz2xy(uv(u, v, z));
-            this.setPosition(x * scale.x, y * scale.y);
-            this.#u = u;
-            this.#v = v;
-            this.#z = z;
-        }
-
-        moveToUVZ(
+        setPositionUVW(
             u: number,
             v: number,
-            z: number,
+            w: number = 0,
+            scale = { x: 1, y: 1 },
+        ) {
+            const { x, y } = this.world.uvw2xy(uv(u, v, w));
+            this.setPosition(x * scale.x, y * scale.y);
+            this.#w = w;
+        }
+
+        moveToUVW(
+            u: number,
+            v: number,
+            w: number,
             { duration, speed, curve = "linear" }: MovementOptions,
         ) {
             return new Promise((resolve) => {
-                const source = this.world.uvz2xy(this.UVZ);
-                const target = this.world.uvz2xy(uv(u, v, z));
+                const source = this.world.uvw2xy(this.isometricPosition);
+                const target = this.world.uvw2xy(uv(u, v, w));
                 if (speed) {
                     duration =
                         Math.sqrt(
@@ -146,9 +166,9 @@ export function Isometric<
                 if (!duration)
                     throw new Error("duration or speed must be provided");
 
-                this._movementsUVZ.push({
-                    source: vec3.fromValues(this.UVZ.u, this.UVZ.v, this.UVZ.z),
-                    target: vec3.fromValues(u, v, z),
+                this.#isometricMovements.push({
+                    source: vec3.fromValues(this.u, this.v, this.w),
+                    target: vec3.fromValues(u, v, w),
                     elapsed: 0,
                     duration: duration,
                     curve: curve,

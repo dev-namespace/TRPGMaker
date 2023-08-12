@@ -8,6 +8,7 @@ import IsometricAnimatedSprite from "./features/isometricEngine/animatedSprite";
 import { IsometricCamera } from "./features/isometricEngine/isometricCamera";
 import { World } from "./features/isometricEngine/world";
 import { testIsometricSpriteMovement } from "./performance/sprites";
+import { Sprite } from "./features/engine/sprite";
 
 const { Engine, Assets } = rootStore;
 
@@ -35,17 +36,27 @@ flow(function* () {
     world.setScale(3, 3);
     world.debugGround();
 
-    const camera = world.add(new IsometricCamera(100, 0, 0));
-    camera.focusUVZ(50, 50, 0);
+    // const camera = world.add(new IsometricCamera(100, 0, 0));
+    // camera.focusUVW(50, 50, 0);
 
-    // yield Assets.load("pointer");
+    yield Assets.load("pointer");
+    // const pointer = world.add(new IsometricSprite(0, 0, 0, "pointer"));
+    const pointer = Engine.add(new Sprite(0, 0, "pointer"));
+    // pointer.x = 200; // @TODO: this is not working
+    pointer.setPosition(200, 0);
+    console.log(pointer.x);
+
     // const pointer = world.add(new IsometricSprite(0, 0, 0, "pointer"));
 
     yield Assets.load("dragon");
-    // @TODO: z is not reaching the getZIndex method because the getter does xy->uvz conversion
+    // @TODO: z is not reaching the getZIndex method because the getter does xy->uvw conversion
     const dragon = world.add(new IsometricAnimatedSprite(95, 95, 50, "dragon"));
     dragon.animate("dragon_walking", { duration: 1000 });
     dragon.loop = true;
+    console.log(dragon.u, dragon.v, dragon.w);
+    // dragon.isometricPosition.u
+    // dragon.position.x
+    // dragon.row = 1;
 
     for (let i = 9; i > 0; i--) {
         const dragon = world.add(
@@ -53,10 +64,10 @@ flow(function* () {
         );
         dragon.animate("dragon_walking", { duration: 1000 });
         dragon.loop = true;
-        dragon.moveToUVZ(95, 5 + i * 10, 0, { speed: 0.05 });
+        dragon.moveToUVW(95, 5 + i * 10, 0, { speed: 0.05 });
     }
 
-    // yield camera.moveToFocusUVZ(50, 50, 0, { duration: 1000 });
-    // yield camera.moveToFocusUVZ(0, 25, 0, { duration: 1000 });
-    // yield camera.moveToFocusUVZ(50, 0, 0, { duration: 1000 });
+    // yield camera.moveToFocusUVW(50, 50, 0, { duration: 1000 });
+    // yield camera.moveToFocusUVW(0, 25, 0, { duration: 1000 });
+    // yield camera.moveToFocusUVW(50, 0, 0, { duration: 1000 });
 })();
