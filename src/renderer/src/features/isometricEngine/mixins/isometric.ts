@@ -1,4 +1,4 @@
-import { RootStore } from "@renderer/store";
+import rootStore, { RootStore } from "@renderer/store";
 import {
     action,
     computed,
@@ -18,9 +18,12 @@ import { GConstructor } from "@renderer/features/engine/mixins/types";
 import { IRenderable } from "@renderer/features/engine/mixins/render";
 import { addReactions } from "@renderer/features/engine/mixins/utils";
 import { World } from "../world";
+import { Sprite } from "@renderer/features/engine/sprite";
 
 export type IIsometric = GConstructor<
     {
+        x: number;
+        y: number;
         world: InstanceType<typeof World>;
         zIndex: number;
     } & IPositionMixin

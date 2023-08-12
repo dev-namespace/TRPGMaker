@@ -11,6 +11,7 @@ import { IContainer } from "./container";
 import { DisplayObject } from ".";
 
 // @TODO: containerable
+// @TODO: update with latest changes
 
 class _Frame implements RenderableEntity {
     type = "frame";

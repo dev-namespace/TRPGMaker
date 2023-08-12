@@ -8,8 +8,6 @@ import { World } from "./world";
 
 class IsometricAnimatedSprite extends AnimatedSprite {
     type = "isometric-sprite"; // @TODO: needed? maybe tags with multiple tags like sprite
-    x: number = 0;
-    y: number = 0;
     zIndex: number = 0;
     _initial_position: UVW = {
         u: 0,

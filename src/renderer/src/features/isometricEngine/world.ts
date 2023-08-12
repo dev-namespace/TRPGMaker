@@ -16,6 +16,7 @@ class _World implements IContainer {
     parent?: IContainer;
     children: RenderableEntity[] = [];
     id: string;
+    _initialPosition: XY;
 
     // definately initialized by _render
     baseDisplayObject!: DisplayObject;
@@ -23,14 +24,15 @@ class _World implements IContainer {
     rootStore!: RootStore;
 
     constructor(
-        public x: number,
-        public y: number,
+        x: number,
+        y: number,
         public uWidth: number,
         public vWidth: number,
         public uvwRatio: number,
         public scale = { x: 1, y: 1 },
     ) {
         this.id = makeId();
+        this._initialPosition = { x, y };
     }
 
     center({ x, y }: { x: number; y: number }) {
@@ -40,6 +42,7 @@ class _World implements IContainer {
         };
     }
 
+    // @TODO: not taking scale into account!!!
     uvw2xy({ u, v, w = 0 }: UVW) {
         const centerOffsetX = this.uWidth * this.uvwRatio;
         const x = Math.round(
@@ -108,10 +111,15 @@ class _World implements IContainer {
         this.rootStore = rootStore;
         const { Engine } = this.rootStore;
 
-        const container = new Container(this.x, this.y);
+        const container = new Container(
+            this._initialPosition.x,
+            this._initialPosition.y,
+        );
+
         const { baseDisplayObject, disposers } = container._render(
             this.rootStore,
         );
+
         Engine.register(this, baseDisplayObject, disposers);
 
         return {

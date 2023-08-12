@@ -17,15 +17,16 @@ class _Camera implements UpdatableEntity {
     blur?: number;
 
     declare moveTo: IPositionMixin["moveTo"];
+    declare setPosition: IPositionMixin["setPosition"];
+    declare x: IPositionMixin["x"];
+    declare y: IPositionMixin["y"];
 
-    constructor(
-        public x: number,
-        public y: number,
-    ) {
+    constructor(x: number, y: number) {
         makeObservable(this, {
             setBlur: true,
         });
         this.id = makeId();
+        this.setPosition(x, y);
     }
 
     setBlur(value: number) {
@@ -33,8 +34,7 @@ class _Camera implements UpdatableEntity {
     }
 
     focus(x: number, y: number) {
-        this.x = x - this.width / 2;
-        this.y = y - this.height / 2;
+        this.setPosition(x - this.width / 2, y - this.height / 2);
     }
 
     moveToFocus(x: number, y: number, options: MovementOptions) {

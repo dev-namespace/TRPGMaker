@@ -36,8 +36,14 @@ flow(function* () {
     world.setScale(3, 3);
     world.debugGround();
 
-    // const camera = world.add(new IsometricCamera(100, 0, 0));
-    // camera.focusUVW(50, 50, 0);
+    const camera = world.add(new IsometricCamera(100, 0, 0));
+    camera.focusUVW(50, 50, 0);
+    // flow(function* () {
+    //     yield camera.moveToFocusUVW(0, 0, 0, { duration: 1000 });
+    //     yield camera.moveToFocusUVW(50, 50, 0, { duration: 2000 });
+    // })();
+
+    // camera.focusUVW(100, 100, 0);
 
     yield Assets.load("pointer");
     // const pointer = world.add(new IsometricSprite(0, 0, 0, "pointer"));
@@ -53,7 +59,6 @@ flow(function* () {
     const dragon = world.add(new IsometricAnimatedSprite(95, 95, 50, "dragon"));
     dragon.animate("dragon_walking", { duration: 1000 });
     dragon.loop = true;
-    console.log(dragon.u, dragon.v, dragon.w);
     // dragon.isometricPosition.u
     // dragon.position.x
     // dragon.row = 1;

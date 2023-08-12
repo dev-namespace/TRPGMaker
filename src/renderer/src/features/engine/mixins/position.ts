@@ -1,5 +1,11 @@
 import { RootStore } from "@renderer/store";
-import { action, makeObservable, observable, runInAction } from "mobx";
+import {
+    action,
+    computed,
+    makeObservable,
+    observable,
+    runInAction,
+} from "mobx";
 import { GConstructor } from "./types";
 import curves from "@renderer/utils/curves";
 import { vec2 } from "gl-matrix";
@@ -23,7 +29,7 @@ export interface Movement {
     callback?: Function;
 }
 
-export type IPositionable = GConstructor<{ x: number; y: number }>;
+export type IPositionable = GConstructor<{}>;
 
 export interface IPositionMixin {
     x: number;
@@ -37,13 +43,17 @@ export function Positionable<TBase extends IPositionable & IRenderable>(
     Base: TBase,
 ) {
     return class Positionable extends Base implements IPositionMixin {
+        _x: number = 0;
+        _y: number = 0;
         _movements: Movement[] = [];
 
         constructor(...args: any[]) {
             super(...args);
             makeObservable(this, {
-                x: observable,
-                y: observable,
+                _x: observable,
+                _y: observable,
+                x: computed,
+                y: computed,
                 setPosition: action,
                 moveTo: action,
             });
@@ -56,7 +66,7 @@ export function Positionable<TBase extends IPositionable & IRenderable>(
             runInAction(() => {
                 const movement = this._movements[0];
                 movement.elapsed += delta; // @TODO round?
-                [this.x, this.y] = vec2.lerp(
+                const [x, y] = vec2.lerp(
                     vec2.create(),
                     movement.source,
                     movement.target,
@@ -66,6 +76,8 @@ export function Positionable<TBase extends IPositionable & IRenderable>(
                     ),
                 );
 
+                this.setPosition(x, y);
+
                 if (movement.elapsed >= movement.duration) {
                     movement.callback?.();
                     this._movements.shift();
@@ -73,9 +85,17 @@ export function Positionable<TBase extends IPositionable & IRenderable>(
             });
         }
 
+        get x() {
+            return this._x;
+        }
+
+        get y() {
+            return this._y;
+        }
+
         setPosition(x: number, y: number) {
-            this.x = x;
-            this.y = y;
+            this._x = x;
+            this._y = y;
         }
 
         moveTo(x: number, y: number, { duration, speed }: MovementOptions) {
@@ -106,11 +126,19 @@ export function PerformantPositionable<
     TBase extends IPositionable & IRenderable,
 >(Base: TBase) {
     return class PerformantPositionable extends Base implements IPositionMixin {
+        #x: number = 0;
+        #y: number = 0;
         _movements: Movement[] = [];
         _newPosition?: { x: number; y: number };
 
         constructor(...args: any[]) {
             super(...args);
+            makeObservable(this, {
+                x: computed,
+                y: computed,
+                setPosition: action,
+                moveTo: action,
+            });
         }
 
         _update(_rootStore: RootStore, delta: number) {
@@ -118,11 +146,11 @@ export function PerformantPositionable<
 
             if (this._newPosition) {
                 const { Engine } = _rootStore;
-                this.x = this._newPosition.x;
-                this.y = this._newPosition.y;
+                this.#x = this._newPosition.x;
+                this.#y = this._newPosition.y;
                 const displayObject = Engine.getDisplayObject(this.id);
-                displayObject.x = this.x;
-                displayObject.y = this.y;
+                displayObject.x = this.#x;
+                displayObject.y = this.#y;
             }
 
             if (this._movements.length > 0) {
@@ -143,8 +171,8 @@ export function PerformantPositionable<
                         ),
                     );
 
-                    this.x = displayObject.x;
-                    this.y = displayObject.y;
+                    this.#x = displayObject.x;
+                    this.#y = displayObject.y;
 
                     if (movement.elapsed >= movement.duration) {
                         movement.callback?.();
@@ -154,11 +182,19 @@ export function PerformantPositionable<
             }
         }
 
+        get x() {
+            return this.#x;
+        }
+
+        get y() {
+            return this.#y;
+        }
+
         setPosition(x: number, y: number) {
             this._baseDisplayObject!.x = x;
             this._baseDisplayObject!.y = y;
-            this.x = x;
-            this.y = y;
+            this.#x = x;
+            this.#y = y;
         }
 
         moveTo(
