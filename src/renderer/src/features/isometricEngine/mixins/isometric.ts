@@ -83,22 +83,21 @@ export function Isometric<
             this.#initialPosition = { u: args[0], v: args[1], w: args[2] };
         }
 
-        _render(rootStore: RootStore) {
-            const output = super._render(rootStore);
+        _render() {
+            super._render();
             this.setPositionUVW(
                 this.#initialPosition.u,
                 this.#initialPosition.v,
                 this.#initialPosition.w,
             );
-            return output;
         }
 
         get UVW() {
             return uv(this.u, this.v, this.#w);
         }
 
-        _update(_rootStore: RootStore, elapsedMS: number) {
-            super._update(_rootStore, elapsedMS);
+        _update(elapsedMS: number) {
+            super._update(elapsedMS);
             runInAction(() => {
                 this.zIndex = this.world.getZIndex(this.isometricPosition);
 

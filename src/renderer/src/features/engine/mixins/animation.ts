@@ -53,14 +53,14 @@ export function Animable<TBase extends IAnimable & IRenderable>(Base: TBase) {
             });
         }
 
-        _update(_rootStore: RootStore, elapsed: number) {
-            super._update(_rootStore, elapsed);
+        _update(elapsedMS: number) {
+            super._update(elapsedMS);
             if (this._animations.length === 0) return;
 
             runInAction(() => {
                 const animation = this._animations[0];
 
-                animation.elapsed += elapsed; // @TODO round?
+                animation.elapsed += elapsedMS; // @TODO round?
 
                 const mu = curves[animation.curve];
                 const frameNumber = Math.min(

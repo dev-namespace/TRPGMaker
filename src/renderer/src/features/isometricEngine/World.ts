@@ -1,22 +1,15 @@
-import { DisplayObject } from "@renderer/features/engine";
-import * as PIXI from "pixi.js";
-import { drawRect } from "../engine/graphics";
-import { Disposer, Reactive, RootStore } from "@renderer/store";
-import { Container, IContainer } from "../engine/Container";
-import { RenderableEntity, makeId } from "../engine/entity";
-import { Renderable } from "../engine/mixins/render";
-import { PerformantPositionable } from "../engine/mixins/position";
-import { Scalable } from "../engine/mixins/scale";
-import { IsometricEntity } from "./entity";
+import { Container } from "@renderer/features/engine/entities/Container";
+import rootStore, { Reactive } from "@renderer/store";
 import { UVW, XY } from "@renderer/utils/coordinates";
+import * as PIXI from "pixi.js";
+import { RenderableEntity } from "../engine/entity";
+import { drawRect } from "../engine/graphics";
+import { IsometricEntity } from "./entity";
 
-// TODO World -> IsometricSpace
+// TODO? World -> IsometricSpace
 class _World extends Container {
     type = "world";
     children: RenderableEntity[] = [];
-
-    // definately initialized by _render
-    container!: IContainer;
 
     constructor(
         x: number,
@@ -78,10 +71,6 @@ class _World extends Container {
         );
     }
 
-    // getZIndex({ u, v, z = 0 }: { u: number; v: number; z?: number }) {
-    //     return u + v + z;
-    // }
-
     // @TODO Make this work for any isometric angle
     getZIndex({ u, v, w = 0 }: UVW) {
         u = u % 1 > 0.15 ? Math.ceil(u) : Math.floor(u);
@@ -98,34 +87,17 @@ class _World extends Container {
     }
 
     add<T extends IsometricEntity>(entity: T): Reactive<T> {
-        const { Engine } = this.rootStore;
+        const { Engine } = rootStore;
         this.children.push(entity);
         entity.parent = this;
-
         entity._assignWorld(this);
-        const { baseDisplayObject, disposers } = entity._render(this.rootStore);
-        return Engine.register(entity, baseDisplayObject, disposers);
-    }
-
-    _render(rootStore: RootStore) {
-        const { baseDisplayObject, disposers } = super._render(rootStore);
-        const { Engine } = this.rootStore;
-
-        Engine.register(this, baseDisplayObject, disposers);
-
-        return {
-            disposers: [] as Disposer[],
-            baseDisplayObject: baseDisplayObject as DisplayObject,
-        };
-    }
-
-    _update(_rootStore: RootStore, _elapsedMS: number) {
-        super._update(_rootStore, _elapsedMS);
+        entity._render();
+        return Engine.register(entity);
     }
 
     // @TODO: remove PIXI dependency
     debugGround() {
-        const { Engine } = this.rootStore;
+        const { Engine } = rootStore;
         const displayObject = Engine.getDisplayObject(
             this.id,
         ) as PIXI.Container;

@@ -1,13 +1,12 @@
+import rootStore from "@renderer/store";
 import { autorun, makeObservable } from "mobx";
+import { BlurFilter } from "pixi.js";
 import { UpdatableEntity, makeId } from "./entity";
-import { Disposer, RootStore } from "@renderer/store";
 import {
     IPositionMixin,
     MovementOptions,
     Positionable,
 } from "./mixins/position";
-import { DisplayObject } from ".";
-import { BlurFilter } from "pixi.js";
 
 class _Camera implements UpdatableEntity {
     type = "camera";
@@ -41,7 +40,7 @@ class _Camera implements UpdatableEntity {
         return this.moveTo(x - this.width / 2, y - this.height / 2, options);
     }
 
-    _render(rootStore: RootStore) {
+    _render() {
         const { Engine } = rootStore;
 
         this.width = Engine.app!.view.width;
@@ -54,7 +53,7 @@ class _Camera implements UpdatableEntity {
 
         window.addEventListener("resize", onResize);
 
-        const disposers = [
+        Engine.addReactions(this, [
             autorun(() => {
                 Engine.stage!.position.set(-this.x, -this.y);
             }),
@@ -65,17 +64,14 @@ class _Camera implements UpdatableEntity {
                     Engine.stage!.filters = [];
                 }
             }),
+            // @ts-ignore: non-mobx disposer @TODO
             (): any => {
                 window.removeEventListener("resize", onResize);
             },
-        ] as Disposer[];
-        return {
-            disposers: disposers,
-            baseDisplayObject: Engine.stage! as DisplayObject,
-        };
+        ]);
     }
 
-    _update(_rootStore: RootStore, _elapsed: number) {}
+    _update(_elapsed: number) {}
 }
 
 export const Camera = Positionable(_Camera);

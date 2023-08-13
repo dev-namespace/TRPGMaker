@@ -60,13 +60,13 @@ export function Positionable<TBase extends IPositionable & IRenderable>(
             });
         }
 
-        _update(_rootStore: RootStore, delta: number) {
-            super._update(_rootStore, delta);
+        _update(elapsedMS: number) {
+            super._update(elapsedMS);
             if (this._movements.length === 0) return;
 
             runInAction(() => {
                 const movement = this._movements[0];
-                movement.elapsed += delta; // @TODO round?
+                movement.elapsed += elapsedMS; // @TODO round?
                 const [x, y] = vec2.lerp(
                     vec2.create(),
                     movement.source,

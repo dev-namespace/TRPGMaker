@@ -1,8 +1,6 @@
-import { RootStore } from "@renderer/store";
-import { DisplayObject } from "../engine";
 import { Sprite } from "../engine/entities/Sprite";
+import { World } from "./World";
 import { Isometric } from "./mixins/isometric";
-import { World } from "./world";
 
 class IsometricSprite extends Sprite {
     type = "isometric-sprite"; // @TODO: needed? maybe tags with multiple tags like sprite
@@ -19,21 +17,6 @@ class IsometricSprite extends Sprite {
         public scale = { x: 1, y: 1 },
     ) {
         super(0, 0, texture);
-    }
-
-    _render(rootStore: RootStore) {
-        const { baseDisplayObject, disposers } = super._render(rootStore);
-
-        const composedDisposers = disposers;
-
-        return {
-            disposers: composedDisposers,
-            baseDisplayObject: baseDisplayObject as DisplayObject,
-        };
-    }
-
-    _update(_rootStore: RootStore, _elapsed: number) {
-        return super._update(_rootStore, _elapsed);
     }
 }
 
