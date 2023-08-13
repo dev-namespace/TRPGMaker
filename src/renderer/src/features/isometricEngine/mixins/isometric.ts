@@ -155,7 +155,6 @@ export function Isometric<
         ) {
             const { x, y } = this.world.uvw2xy(uv(u, v, w));
             this.setPosition(x * scale.x, y * scale.y);
-            console.log("!2 xy", x, y);
             this.#w = w;
         }
 

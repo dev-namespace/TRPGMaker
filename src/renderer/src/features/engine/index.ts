@@ -2,7 +2,7 @@
 
 import * as PIXI from "pixi.js";
 import "@pixi/unsafe-eval";
-import { addStats, Stats } from "pixi-stats";
+import { addStats } from "pixi-stats";
 
 import { makeAutoObservable } from "mobx";
 import { EngineEntity, RenderableEntity, UpdatableEntity } from "./entity";
@@ -39,7 +39,7 @@ export class EngineStore implements Store {
         this.rootStore = rootStore;
     }
 
-    start(parent: HTMLElement) {
+    async start(parent: HTMLElement) {
         this.app = this.createApp(parent);
         this.stage = this.app.stage;
         this.ticker = this.app.ticker;
@@ -47,9 +47,11 @@ export class EngineStore implements Store {
 
         this.ticker.minFPS = 60;
         this.ticker.maxFPS = 165;
-        // this.ticker.speed = 2;
-        console.log("!2 fps", this.ticker.FPS);
-        // console.log(this.ticker.minFPS, this.ticker.maxFPS);
+
+        this.app.renderer.events.cursorStyles.default =
+            "url('images/pointer.png'),auto";
+
+        // this.app.renderer.events.cursorStyles.hover = hoverIcon;
 
         this.ticker.add(stats.update, stats, UPDATE_PRIORITY.UTILITY);
 
