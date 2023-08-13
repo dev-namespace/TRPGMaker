@@ -14,7 +14,6 @@ class _IsometricCamera extends Camera {
     width: number = 0;
     height: number = 0;
     zIndex: number = 0;
-    _initial_position: UVW;
 
     declare moveToUVW: IIsometricMixin["moveToUVW"];
     declare setPositionUVW: IIsometricMixin["setPositionUVW"];
@@ -22,15 +21,12 @@ class _IsometricCamera extends Camera {
     // definately initialized by _render
     world!: InstanceType<typeof World>;
 
-    constructor(u: number, v: number, w: number) {
+    constructor(_u: number, _v: number, _w: number) {
         super(0, 0);
         this.id = makeId();
-        this._initial_position = { u, v, w };
     }
 
-    // @TODO: probably have to correct the world position
     focusUVW(u: number, v: number, w: number) {
-        // @TODO: this.world.x and this.world.y are always 0 because world doesn't extend container
         const { x, y } = this.world.uvw2xy(uv(u, v, w));
         const correctedX =
             x * this.world.scale.x - this.width / 2 + this.world.x;

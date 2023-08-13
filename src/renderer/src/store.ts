@@ -22,5 +22,6 @@ const rootStore: RootStore = {} as RootStore;
 
 rootStore.Assets = new AssetStore(rootStore);
 rootStore.Engine = new EngineStore(rootStore);
+// GUI, Sound, Network
 
 export default rootStore;

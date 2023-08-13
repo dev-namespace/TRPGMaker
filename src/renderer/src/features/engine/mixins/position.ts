@@ -10,6 +10,7 @@ import { GConstructor } from "./types";
 import curves from "@renderer/utils/curves";
 import { vec2 } from "gl-matrix";
 import { IRenderable } from "./render";
+import { XY } from "@renderer/utils/coordinates";
 
 export type Speed = number;
 export type Duration = number;
@@ -121,7 +122,7 @@ export function Positionable<TBase extends IPositionable & IRenderable>(
     };
 }
 
-// Modifies the displayObject directly
+// This version modifies the displayObject directly
 export function PerformantPositionable<
     TBase extends IPositionable & IRenderable,
 >(Base: TBase) {
@@ -129,7 +130,8 @@ export function PerformantPositionable<
         #x: number = 0;
         #y: number = 0;
         _movements: Movement[] = [];
-        _newPosition?: { x: number; y: number };
+        _newPosition?: XY;
+        #initialPosition: XY;
 
         constructor(...args: any[]) {
             super(...args);
@@ -139,6 +141,13 @@ export function PerformantPositionable<
                 setPosition: action,
                 moveTo: action,
             });
+            this.#initialPosition = { x: args[0], y: args[1] };
+        }
+
+        _render(_rootStore: RootStore) {
+            const output = super._render(_rootStore);
+            this.setPosition(this.#initialPosition.x, this.#initialPosition.y);
+            return output;
         }
 
         _update(_rootStore: RootStore, delta: number) {

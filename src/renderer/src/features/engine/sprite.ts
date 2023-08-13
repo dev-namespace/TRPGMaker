@@ -16,14 +16,13 @@ class _Sprite implements RenderableEntity {
     type = "sprite"; // @TODO: needed? maybe tags with multiple tags like sprite
     parent?: IContainer;
     id: string;
-    _initialPosition: XY;
 
     // definately initialized by _render @TODO: maybe not needed?
     baseDisplayObject!: DisplayObject;
 
     constructor(
-        x: number,
-        y: number,
+        _x: number,
+        _y: number,
         public texture: string,
         public scale = { x: 1, y: 1 },
     ) {
@@ -31,7 +30,6 @@ class _Sprite implements RenderableEntity {
             texture: observable,
         });
         this.id = makeId();
-        this._initialPosition = { x, y };
     }
 
     _render(rootStore: RootStore) {
@@ -39,12 +37,6 @@ class _Sprite implements RenderableEntity {
 
         const displayObject = new PIXISprite(Texture.EMPTY);
         Engine.addDisplayObject(this.id, displayObject);
-
-        displayObject.position.set(
-            this._initialPosition.x,
-            this._initialPosition.y,
-        );
-
         displayObject.texture = Assets.get(this.texture);
 
         const disposers = [

@@ -47,9 +47,9 @@ flow(function* () {
 
     yield Assets.load("pointer");
     // const pointer = world.add(new IsometricSprite(0, 0, 0, "pointer"));
-    const pointer = Engine.add(new Sprite(0, 0, "pointer"));
+    const pointer = Engine.add(new Sprite(120, 120, "pointer"));
     // pointer.x = 200; // @TODO: this is not working
-    pointer.setPosition(200, 0);
+    // pointer.setPosition(200, 0);
     console.log(pointer.x);
 
     // const pointer = world.add(new IsometricSprite(0, 0, 0, "pointer"));

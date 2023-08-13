@@ -8,7 +8,7 @@ import {
 } from "mobx";
 import { vec2, vec3 } from "gl-matrix";
 import curves from "@renderer/utils/curves";
-import { uv, xy } from "@renderer/utils/coordinates";
+import { UVW, uv, xy } from "@renderer/utils/coordinates";
 import {
     IPositionMixin,
     IPositionable,
@@ -67,6 +67,7 @@ export function Isometric<
     return class Isometric extends Base {
         #w: number = 0;
         #isometricMovements: MovementUVW[] = [];
+        #initialPosition: UVW;
 
         constructor(...args: any[]) {
             super(...args);
@@ -79,13 +80,17 @@ export function Isometric<
                 UVW: computed,
                 setPositionUVW: action,
             });
+            this.#initialPosition = { u: args[0], v: args[1], w: args[2] };
         }
 
         _render(rootStore: RootStore) {
-            return addReactions(
-                super._render(rootStore),
-                (_baseDisplayObject) => [],
+            const output = super._render(rootStore);
+            this.setPositionUVW(
+                this.#initialPosition.u,
+                this.#initialPosition.v,
+                this.#initialPosition.w,
             );
+            return output;
         }
 
         get UVW() {
@@ -110,7 +115,10 @@ export function Isometric<
                     ),
                 );
 
-                this.setPositionUVW(u, v, w);
+                // We use floats here so movement is smoother
+                const { x, y } = this.world.uvw2xyFloat(uv(u, v, w));
+                this.setPosition(x, y);
+                this.#w = w;
 
                 if (movement.elapsed >= movement.duration) {
                     movement.callback?.();
@@ -147,6 +155,7 @@ export function Isometric<
         ) {
             const { x, y } = this.world.uvw2xy(uv(u, v, w));
             this.setPosition(x * scale.x, y * scale.y);
+            console.log("!2 xy", x, y);
             this.#w = w;
         }
 

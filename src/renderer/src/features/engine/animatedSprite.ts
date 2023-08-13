@@ -17,15 +17,14 @@ class _AnimatedSprite implements RenderableEntity {
     frame: number = 0;
     loop = false;
     playing = false;
-    _initialPosition: XY;
 
     // definately initialized by _render
     baseDisplayObject!: DisplayObject;
 
     // @TODO: fix x, y are not being taken into account
     constructor(
-        x: number,
-        y: number,
+        _x: number,
+        _y: number,
         public spritesheet: string,
         public animation?: string,
         public speed = 0.05,
@@ -33,7 +32,6 @@ class _AnimatedSprite implements RenderableEntity {
     ) {
         makeObservable(this, {});
         this.id = makeId();
-        this._initialPosition = { x, y };
     }
 
     _render(rootStore: RootStore) {
@@ -41,10 +39,6 @@ class _AnimatedSprite implements RenderableEntity {
 
         const displayObject = new Sprite(Texture.EMPTY);
         Engine.addDisplayObject(this.id, displayObject);
-        displayObject.position.set(
-            this._initialPosition.x,
-            this._initialPosition.y,
-        );
 
         const spritesheet = Assets.get(this.spritesheet);
 

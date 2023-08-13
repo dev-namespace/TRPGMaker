@@ -446,6 +446,11 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
 
+"@jacekpietal/gstats@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@jacekpietal/gstats/-/gstats-0.1.0.tgz#b61fd6cc6f7ed0fd27e92484ee418ea55f62c3a1"
+  integrity sha512-52ILOmtGRZdunCFXE/wxNaGs/CsP0mF7QbNKvpviSI8cnznognB65zWG2r+k+2SNhYPCDg+FTi3/pj5JSxeh3A==
+
 "@jridgewell/gen-mapping@^0.3.0", "@jridgewell/gen-mapping@^0.3.2":
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/@jridgewell/gen-mapping/-/gen-mapping-0.3.3.tgz#7e02e6eb5df901aaedb08514203b096614024098"
@@ -3169,6 +3174,13 @@ picomatch@^2.3.1:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-2.3.1.tgz#3ba3833733646d9d3e4995946c1365a67fb07a42"
   integrity sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==
+
+pixi-stats@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/pixi-stats/-/pixi-stats-1.2.2.tgz#dc9c924858483b244573c39a585e60a9a2291185"
+  integrity sha512-wajlyv3nl/xha7H5TuSHZr+iYclynLilF37H0IWhxsWtTOIF7EAe/oVXyY2nPVY6CE+s2MsB3Te+g9OcofrrAg==
+  dependencies:
+    "@jacekpietal/gstats" "^0.1.0"
 
 pixi.js@*, pixi.js@^7.2.4:
   version "7.2.4"

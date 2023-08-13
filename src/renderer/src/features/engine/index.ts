@@ -2,10 +2,12 @@
 
 import * as PIXI from "pixi.js";
 import "@pixi/unsafe-eval";
+import { addStats, Stats } from "pixi-stats";
 
 import { makeAutoObservable } from "mobx";
 import { EngineEntity, RenderableEntity, UpdatableEntity } from "./entity";
 import { Store, RootStore, Reactive, Disposer } from "@renderer/store";
+import { UPDATE_PRIORITY } from "pixi.js";
 
 export type DisplayObject = PIXI.DisplayObject;
 export type RenderFunction = (entity: Reactive<any>) => {
@@ -41,7 +43,15 @@ export class EngineStore implements Store {
         this.app = this.createApp(parent);
         this.stage = this.app.stage;
         this.ticker = this.app.ticker;
+        const stats = addStats(document, this.app);
+
+        this.ticker.minFPS = 60;
+        this.ticker.maxFPS = 165;
+        // this.ticker.speed = 2;
+        console.log("!2 fps", this.ticker.FPS);
         // console.log(this.ticker.minFPS, this.ticker.maxFPS);
+
+        this.ticker.add(stats.update, stats, UPDATE_PRIORITY.UTILITY);
 
         this.ticker.add(() => {
             for (let entity of Object.values(this.entities)) {

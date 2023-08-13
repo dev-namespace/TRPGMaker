@@ -1,7 +1,7 @@
 import { DisplayObject } from "@renderer/features/engine";
 import * as PIXI from "pixi.js";
 import { drawRect } from "../engine/graphics";
-import { Reactive, RootStore } from "@renderer/store";
+import { Disposer, Reactive, RootStore } from "@renderer/store";
 import { Container, IContainer } from "../engine/container";
 import { RenderableEntity, makeId } from "../engine/entity";
 import { Renderable } from "../engine/mixins/render";
@@ -11,17 +11,12 @@ import { IsometricEntity } from "./entity";
 import { UVW, XY } from "@renderer/utils/coordinates";
 
 // TODO World -> IsometricSpace
-class _World implements IContainer {
+class _World extends Container {
     type = "world";
-    parent?: IContainer;
     children: RenderableEntity[] = [];
-    id: string;
-    _initialPosition: XY;
 
     // definately initialized by _render
-    baseDisplayObject!: DisplayObject;
     container!: IContainer;
-    rootStore!: RootStore;
 
     constructor(
         x: number,
@@ -31,8 +26,7 @@ class _World implements IContainer {
         public uvwRatio: number,
         public scale = { x: 1, y: 1 },
     ) {
-        this.id = makeId();
-        this._initialPosition = { x, y };
+        super(x, y, scale);
     }
 
     center({ x, y }: { x: number; y: number }) {
@@ -42,7 +36,13 @@ class _World implements IContainer {
         };
     }
 
-    // @TODO: not taking scale into account!!!
+    uvw2xyFloat({ u, v, w = 0 }: UVW) {
+        const centerOffsetX = this.uWidth * this.uvwRatio;
+        const x = u * this.uvwRatio - v * this.uvwRatio + centerOffsetX;
+        const y = u + v - w;
+        return { x, y };
+    }
+
     uvw2xy({ u, v, w = 0 }: UVW) {
         const centerOffsetX = this.uWidth * this.uvwRatio;
         const x = Math.round(
@@ -108,27 +108,20 @@ class _World implements IContainer {
     }
 
     _render(rootStore: RootStore) {
-        this.rootStore = rootStore;
+        const { baseDisplayObject, disposers } = super._render(rootStore);
         const { Engine } = this.rootStore;
-
-        const container = new Container(
-            this._initialPosition.x,
-            this._initialPosition.y,
-        );
-
-        const { baseDisplayObject, disposers } = container._render(
-            this.rootStore,
-        );
 
         Engine.register(this, baseDisplayObject, disposers);
 
         return {
-            disposers: [],
-            baseDisplayObject: baseDisplayObject,
+            disposers: [] as Disposer[],
+            baseDisplayObject: baseDisplayObject as DisplayObject,
         };
     }
 
-    _update(_rootStore: RootStore, _elapsedMS: number) {}
+    _update(_rootStore: RootStore, _elapsedMS: number) {
+        super._update(_rootStore, _elapsedMS);
+    }
 
     // @TODO: remove PIXI dependency
     debugGround() {
@@ -159,4 +152,4 @@ class _World implements IContainer {
     }
 }
 
-export const World = Scalable(PerformantPositionable(Renderable(_World)));
+export const World = _World;
