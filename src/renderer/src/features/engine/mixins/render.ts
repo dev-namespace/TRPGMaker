@@ -1,7 +1,7 @@
 import { action, makeObservable, observable, reaction } from "mobx";
 import { GConstructor } from "./types";
 
-import { Disposer, Reactive, RootStore } from "@renderer/store";
+import rootStore, { Disposer, Reactive, RootStore } from "@renderer/store";
 import { DisplayObject } from "@renderer/features/engine";
 import { IContainer } from "../container";
 
@@ -10,11 +10,8 @@ export type IRenderable = GConstructor<{
     type: string;
     parent?: IContainer;
     _baseDisplayObject?: DisplayObject;
-    _update(rootStore: RootStore, delta: number): void;
-    _render(entity: Reactive<any>): {
-        disposers: Disposer[];
-        baseDisplayObject: DisplayObject;
-    };
+    _update(delta: number): void;
+    _render(): void;
 }>;
 
 export function Renderable<TBase extends IRenderable>(Base: TBase) {
@@ -27,24 +24,19 @@ export function Renderable<TBase extends IRenderable>(Base: TBase) {
             });
         }
 
-        _render(rootStore: RootStore) {
-            const { disposers, baseDisplayObject } = super._render(rootStore);
-            this._baseDisplayObject = baseDisplayObject;
-
-            const combinedDisposers = [
-                ...disposers,
-                ...[
-                    reaction(
-                        () => this.parent,
-                        () => {
-                            rootStore.Engine.appendToParent(this);
-                        },
-                        { fireImmediately: true },
-                    ),
-                ],
-            ];
-
-            return { disposers: combinedDisposers, baseDisplayObject };
+        _render() {
+            const { Engine } = rootStore;
+            super._render();
+            this._baseDisplayObject = Engine.getDisplayObject(this.id);
+            Engine.addReactions(this, [
+                reaction(
+                    () => this.parent,
+                    () => {
+                        rootStore.Engine.appendToParent(this);
+                    },
+                    { fireImmediately: true },
+                ),
+            ]);
         }
 
         setParent(parent: IContainer) {

@@ -1,4 +1,4 @@
-import { RootStore } from "@renderer/store";
+import rootStore, { RootStore } from "@renderer/store";
 import {
     action,
     computed,
@@ -144,17 +144,17 @@ export function PerformantPositionable<
             this.#initialPosition = { x: args[0], y: args[1] };
         }
 
-        _render(_rootStore: RootStore) {
-            const output = super._render(_rootStore);
+        _render() {
+            const output = super._render();
             this.setPosition(this.#initialPosition.x, this.#initialPosition.y);
             return output;
         }
 
-        _update(_rootStore: RootStore, delta: number) {
-            super._update(_rootStore, delta);
+        _update(elapsedMS: number) {
+            super._update(elapsedMS);
 
             if (this._newPosition) {
-                const { Engine } = _rootStore;
+                const { Engine } = rootStore;
                 this.#x = this._newPosition.x;
                 this.#y = this._newPosition.y;
                 const displayObject = Engine.getDisplayObject(this.id);
@@ -163,13 +163,13 @@ export function PerformantPositionable<
             }
 
             if (this._movements.length > 0) {
-                const { Engine } = _rootStore;
+                const { Engine } = rootStore;
 
                 const displayObject = Engine.getDisplayObject(this.id);
 
                 runInAction(() => {
                     const movement = this._movements[0];
-                    movement.elapsed += delta; // @TODO round?
+                    movement.elapsed += elapsedMS;
                     [displayObject.x, displayObject.y] = vec2.lerp(
                         vec2.create(),
                         movement.source,

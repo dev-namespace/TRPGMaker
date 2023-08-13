@@ -10,12 +10,9 @@ import { Store, RootStore, Reactive, Disposer } from "@renderer/store";
 import { UPDATE_PRIORITY } from "pixi.js";
 
 export type DisplayObject = PIXI.DisplayObject;
-export type RenderFunction = (entity: Reactive<any>) => {
-    disposers: Disposer[];
-    baseDisplayObject: DisplayObject;
-};
 
-export type UpdateFunction = (rootStore: RootStore, elapsedMS: number) => void;
+export type RenderFunction = () => void;
+export type UpdateFunction = (elapsedMS: number) => void;
 
 export class EngineStore implements Store {
     rootStore: RootStore;
@@ -45,6 +42,7 @@ export class EngineStore implements Store {
         this.ticker = this.app.ticker;
         const stats = addStats(document, this.app);
 
+        globalThis.__PIXI_APP__ = this.app;
         this.ticker.minFPS = 60;
         this.ticker.maxFPS = 165;
 
@@ -83,13 +81,26 @@ export class EngineStore implements Store {
     //     return this.entities[entity.id];
     // }
 
+    // add<T extends UpdatableEntity>(entity: T): Reactive<T> {
+    //     this.entities[entity.id] = entity;
+    //     const result = entity._render(this.rootStore);
+    //     const disposers = result.disposers;
+    //     this.disposers[entity.id] = disposers;
+    //     return this.entities[entity.id] as Reactive<T>; // return the proxy
+    // }
+
     // @TODO: Renderable or Updatable?
     add<T extends UpdatableEntity>(entity: T): Reactive<T> {
         this.entities[entity.id] = entity;
-        const result = entity._render(this.rootStore);
-        const disposers = result.disposers;
-        this.disposers[entity.id] = disposers;
+        entity._render();
         return this.entities[entity.id] as Reactive<T>; // return the proxy
+    }
+
+    addReactions(entity: RenderableEntity, disposers: Disposer[]) {
+        this.disposers[entity.id] = [
+            ...(this.disposers[entity.id] || []),
+            ...disposers,
+        ];
     }
 
     register<T extends RenderableEntity>(
