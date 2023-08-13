@@ -7,7 +7,7 @@ import { PerformantPositionable } from "./mixins/position";
 import { Scalable } from "./mixins/scale";
 import { pick } from "lodash";
 import { Renderable } from "./mixins/render";
-import { IContainer } from "./container";
+import { IContainer } from "./Container";
 import { DisplayObject } from ".";
 
 // @TODO: containerable

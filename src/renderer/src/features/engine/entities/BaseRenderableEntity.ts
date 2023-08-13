@@ -1,6 +1,6 @@
-import { DisplayObject } from ".";
-import { IContainer } from "./container";
-import { RenderableEntity, makeId } from "./entity";
+import { DisplayObject } from "@renderer/features/engine";
+import { RenderableEntity, makeId } from "@renderer/features/engine/entity";
+import { IContainer } from "./Container";
 
 export class BaseRenderableEntity implements RenderableEntity {
     type = "basic";

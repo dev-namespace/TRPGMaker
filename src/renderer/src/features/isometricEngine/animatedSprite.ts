@@ -2,7 +2,7 @@ import { Disposer, RootStore } from "@renderer/store";
 import { UVW } from "@renderer/utils/coordinates";
 import { autorun } from "mobx";
 import { DisplayObject } from "../engine";
-import { AnimatedSprite } from "../engine/animatedSprite";
+import { AnimatedSprite } from "../engine/entities/AnimatedSprite";
 import { IIsometricMixin, Isometric } from "./mixins/isometric";
 import { World } from "./world";
 

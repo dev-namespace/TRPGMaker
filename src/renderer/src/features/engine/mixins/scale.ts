@@ -1,8 +1,7 @@
-import { RootStore } from "@renderer/store";
+import rootStore from "@renderer/store";
 import { action, autorun, makeObservable, observable } from "mobx";
-import { GConstructor } from "./types";
-import { addReactions } from "./utils";
 import { IRenderable } from "./render";
+import { GConstructor } from "./types";
 
 export type IScalable = GConstructor<{ scale: { x: number; y: number } }>;
 
@@ -16,15 +15,17 @@ export function Scalable<TBase extends IScalable & IRenderable>(Base: TBase) {
             });
         }
 
-        _render(rootStore: RootStore) {
-            return addReactions(
-                super._render(rootStore),
-                (baseDisplayObject) => [
-                    autorun(() => {
-                        baseDisplayObject.scale.set(this.scale.x, this.scale.y);
-                    }),
-                ],
-            );
+        _render() {
+            const { Engine } = rootStore;
+            super._render();
+            Engine.addReactions(this, [
+                autorun(() => {
+                    this._baseDisplayObject!.scale.set(
+                        this.scale.x,
+                        this.scale.y,
+                    );
+                }),
+            ]);
         }
 
         setScale(x: number, y: number) {

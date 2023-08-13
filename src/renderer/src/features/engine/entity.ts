@@ -1,6 +1,6 @@
 import { v4 as uuid } from "uuid";
 import { RenderFunction, UpdateFunction } from ".";
-import { IContainer } from "./container";
+import { IContainer } from "./entities/Container";
 
 export interface Entity {
     id: string;

@@ -1,4 +1,4 @@
-import { Frame } from "@renderer/features/engine/frame";
+import { Frame } from "@renderer/features/engine/Frame";
 import rootStore from "@renderer/store";
 
 const { Engine } = rootStore;

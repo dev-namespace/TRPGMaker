@@ -1,14 +1,11 @@
 import * as PIXI from "pixi.js";
 
-import "./assets/index.css";
-import rootStore from "./store";
 import { flow, when } from "mobx";
-import IsometricSprite from "./features/isometricEngine/sprite";
-import IsometricAnimatedSprite from "./features/isometricEngine/animatedSprite";
-import { IsometricCamera } from "./features/isometricEngine/isometricCamera";
-import { World } from "./features/isometricEngine/world";
-import { testIsometricSpriteMovement } from "./performance/sprites";
-import { Sprite } from "./features/engine/sprite";
+import "./assets/index.css";
+import { AnimatedSprite } from "@renderer/features/engine/entities/AnimatedSprite";
+import { Container } from "./features/engine/entities/Container";
+import { Sprite } from "./features/engine/entities/Sprite";
+import rootStore from "./store";
 
 const { Engine, Assets } = rootStore;
 
@@ -33,8 +30,19 @@ Assets.add("dragon", "spritesheets/dragon/spritesheet.json");
 
 flow(function* () {
     yield Assets.load("pointer");
+    yield Assets.load("dragon");
     const pointer = Engine.add(new Sprite(120, 120, "pointer"));
-    console.log("!2 pointer.x", pointer.x);
+
+    const container = Engine.add(new Container(0, 0));
+    container.setScale(3, 3);
+    container.add(pointer); // @TODO: maybe append instead of add
+
+    const dragon = Engine.add(new AnimatedSprite(100, 100, "dragon"));
+    container.add(dragon);
+    dragon.animate("dragon_walking", { duration: 1000 });
+    dragon.playing = true;
+    dragon.loop = true;
+
     // pointer.x = 200; // @TODO: this is not working
     // pointer.setPosition(200, 0);
 

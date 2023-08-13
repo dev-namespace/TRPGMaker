@@ -1,6 +1,6 @@
 import { RootStore } from "@renderer/store";
 import { DisplayObject } from "../engine";
-import { Sprite } from "../engine/sprite";
+import { Sprite } from "../engine/entities/Sprite";
 import { Isometric } from "./mixins/isometric";
 import { World } from "./world";
 

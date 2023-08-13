@@ -1,27 +1,19 @@
-import { Disposer, RootStore } from "@renderer/store";
-import { RenderableEntity, makeId } from "./entity";
+import { autorun } from "mobx";
 import { Sprite, Texture } from "pixi.js";
-import { autorun, makeObservable } from "mobx";
-import { PerformantPositionable } from "./mixins/position";
-import { Scalable } from "./mixins/scale";
-import { Renderable } from "./mixins/render";
-import { IContainer } from "./container";
-import { Animable } from "./mixins/animation";
-import { DisplayObject } from ".";
-import { XY } from "@renderer/utils/coordinates";
 
-class _AnimatedSprite implements RenderableEntity {
-    type = "sprite";
-    parent?: IContainer;
-    id: string;
+import { Animable } from "@renderer/features/engine/mixins/animation";
+import { PerformantPositionable } from "@renderer/features/engine/mixins/position";
+import { Renderable } from "@renderer/features/engine/mixins/render";
+import { Scalable } from "@renderer/features/engine/mixins/scale";
+import rootStore from "@renderer/store";
+import { BaseRenderableEntity } from "./BaseRenderableEntity";
+
+class _AnimatedSprite extends BaseRenderableEntity {
+    type = "animated-sprite";
     frame: number = 0;
     loop = false;
     playing = false;
 
-    // definately initialized by _render
-    baseDisplayObject!: DisplayObject;
-
-    // @TODO: fix x, y are not being taken into account
     constructor(
         _x: number,
         _y: number,
@@ -30,19 +22,16 @@ class _AnimatedSprite implements RenderableEntity {
         public speed = 0.05,
         public scale = { x: 1, y: 1 },
     ) {
-        makeObservable(this, {});
-        this.id = makeId();
+        super();
     }
 
-    _render(rootStore: RootStore) {
+    _render() {
+        super._render();
         const { Engine, Assets } = rootStore;
-
         const displayObject = new Sprite(Texture.EMPTY);
-        Engine.addDisplayObject(this.id, displayObject);
-
         const spritesheet = Assets.get(this.spritesheet);
-
-        const disposers = [
+        Engine.addDisplayObject(this.id, displayObject);
+        Engine.addReactions(this, [
             autorun(() => {
                 if (this.animation) {
                     const anchor =
@@ -55,12 +44,8 @@ class _AnimatedSprite implements RenderableEntity {
                     displayObject.texture = Texture.EMPTY;
                 }
             }),
-        ] as Disposer[];
-
-        return { disposers, baseDisplayObject: displayObject as DisplayObject };
+        ]);
     }
-
-    _update(_rootStore: RootStore, _delta: number) {}
 }
 
 export const AnimatedSprite = Animable(

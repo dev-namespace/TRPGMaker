@@ -4,7 +4,7 @@ import { Sprite as PIXISprite, Texture } from "pixi.js";
 import { autorun, makeObservable, observable } from "mobx";
 import { PerformantPositionable } from "./mixins/position";
 import { Scalable } from "./mixins/scale";
-import { IContainer } from "./container";
+import { IContainer } from "./Container";
 import { Renderable } from "./mixins/render";
 import { DisplayObject } from ".";
 import { XY } from "@renderer/utils/coordinates";

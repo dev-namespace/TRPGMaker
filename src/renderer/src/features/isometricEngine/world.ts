@@ -2,7 +2,7 @@ import { DisplayObject } from "@renderer/features/engine";
 import * as PIXI from "pixi.js";
 import { drawRect } from "../engine/graphics";
 import { Disposer, Reactive, RootStore } from "@renderer/store";
-import { Container, IContainer } from "../engine/container";
+import { Container, IContainer } from "../engine/Container";
 import { RenderableEntity, makeId } from "../engine/entity";
 import { Renderable } from "../engine/mixins/render";
 import { PerformantPositionable } from "../engine/mixins/position";

@@ -1,9 +1,10 @@
+import { PerformantPositionable } from "@renderer/features/engine/mixins/position";
+import { Renderable } from "@renderer/features/engine/mixins/render";
+import { Scalable } from "@renderer/features/engine/mixins/scale";
 import rootStore from "@renderer/store";
 import { autorun, makeObservable, observable } from "mobx";
 import { Sprite as PIXISprite, Texture } from "pixi.js";
-import { BaseRenderableEntity } from "./baseRenderableEntity";
-import { PerformantPositionable } from "./mixins/position";
-import { Renderable } from "./mixins/render";
+import { BaseRenderableEntity } from "./BaseRenderableEntity";
 
 class _Sprite extends BaseRenderableEntity {
     type = "sprite";
@@ -35,4 +36,4 @@ class _Sprite extends BaseRenderableEntity {
     }
 }
 
-export const Sprite = PerformantPositionable(Renderable(_Sprite));
+export const Sprite = Scalable(PerformantPositionable(Renderable(_Sprite)));

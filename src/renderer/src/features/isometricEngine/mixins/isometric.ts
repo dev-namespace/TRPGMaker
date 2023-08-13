@@ -18,7 +18,7 @@ import { GConstructor } from "@renderer/features/engine/mixins/types";
 import { IRenderable } from "@renderer/features/engine/mixins/render";
 import { addReactions } from "@renderer/features/engine/mixins/utils";
 import { World } from "../world";
-import { Sprite } from "@renderer/features/engine/sprite";
+import { Sprite } from "@renderer/features/engine/entities/Sprite";
 
 export type IIsometric = GConstructor<
     {

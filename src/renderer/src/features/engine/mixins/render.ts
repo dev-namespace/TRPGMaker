@@ -1,9 +1,9 @@
 import { action, makeObservable, observable, reaction } from "mobx";
 import { GConstructor } from "./types";
 
-import rootStore, { Disposer, Reactive, RootStore } from "@renderer/store";
 import { DisplayObject } from "@renderer/features/engine";
-import { IContainer } from "../container";
+import rootStore from "@renderer/store";
+import { IContainer } from "@renderer/features/engine/entities/Container";
 
 export type IRenderable = GConstructor<{
     id: string;
