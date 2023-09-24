@@ -8,9 +8,11 @@ import { Store, RootStore, Reactive, Disposer } from "@renderer/store";
 import { UPDATE_PRIORITY } from "pixi.js";
 
 export type DisplayObject = PIXI.DisplayObject;
-
 export type RenderFunction = () => void;
 export type UpdateFunction = (elapsedMS: number) => void;
+
+export type BaseSprite = PIXI.Sprite;
+export type BaseContainer = PIXI.Container;
 
 export class EngineStore implements Store {
     rootStore: RootStore;

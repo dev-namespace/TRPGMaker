@@ -4,8 +4,8 @@ import { flow, when } from "mobx";
 import "./assets/index.css";
 import IsometricAnimatedSprite from "./features/isometricEngine/IsometricAnimatedSprite";
 import { World } from "./features/isometricEngine/World";
-import { IsometricCamera } from "./features/isometricEngine/IsometricCamera";
 import rootStore from "./store";
+import IsometricSprite from "./features/isometricEngine/IsometricSprite";
 
 const { Engine, Assets } = rootStore;
 
@@ -51,11 +51,14 @@ flow(function* () {
     world.setScale(3, 3);
     world.debugGround();
 
+    const pointer = world.add(new IsometricSprite(50, 50, 0, "pointer"));
+    pointer.angle = 80;
+
     // const camera = world.add(new IsometricCamera(0, 0, 0));
     // camera.moveToFocusUVW(50, 50, 0, { duration: 2000 });
 
     const dragon = world.add(new IsometricAnimatedSprite(95, 95, 50, "dragon"));
-    dragon.animate("dragon_walking", { duration: 1000 });
+    dragon.animate("dragon_walking_back", { duration: 1000 });
     dragon.loop = true;
 
     for (let i = 9; i > 0; i--) {
@@ -65,6 +68,7 @@ flow(function* () {
         dragon.animate("dragon_walking", { duration: 1000 });
         dragon.loop = true;
         dragon.moveToUVW(95, 5 + i * 10, 0, { speed: 0.05 });
+        dragon.angle = 270;
     }
 
     // yield camera.moveToFocusUVW(50, 50, 0, { duration: 1000 });

@@ -122,6 +122,26 @@ class _World extends Container {
         displayObject.addChild(graphics);
         displayObject.addChild(polygon);
     }
+
+    angleRequiresFlip(angle: number) {
+        return (angle >= 45 && angle < 135) || (angle >= 225 && angle < 315);
+    }
+
+    textureAngleAdapter(angle: number, texture: string) {
+        if (angle >= 45 && angle < 225) {
+            return `${texture}_back`;
+        } else {
+            return texture;
+        }
+    }
+
+    setTextureAngleAdapter(func: (angle: number, texture: string) => string) {
+        this.textureAngleAdapter = func;
+    }
+
+    setFlipAngleAdapter(func: (angle: number) => boolean) {
+        this.angleRequiresFlip = func;
+    }
 }
 
 export const World = _World;
